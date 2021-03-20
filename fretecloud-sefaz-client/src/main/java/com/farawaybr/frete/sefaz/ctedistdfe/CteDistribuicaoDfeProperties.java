@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CteDistribuicaoDfeProperties {
 
-	private String url;
+	private String url = "https://www1.cte.fazenda.gov.br/CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx";
 
 	public String getUrl() {
 		return url;
