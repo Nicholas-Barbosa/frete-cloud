@@ -1,7 +1,9 @@
-cte: 
-  dist:
-     dfe:
-        url: https://www1.cte.fazenda.gov.br/CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx
-certificate:
-    keyStorePath: C:\Users\nicho\Downloads\server-keystore.jks
+sefaz:
+   truststore:
+     path: C:\Users\nicho\Downloads\server-keystore.jks
+     password: server-keystore-p455w0rd
+   docfe:
+     conhecimento:
+      url: https://www1.cte.fazenda.gov.br/CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx
+     
   

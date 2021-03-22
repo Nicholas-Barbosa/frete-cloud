@@ -1,4 +1,4 @@
-package com.farawaybr.frete.domain.certificate;
+package com.farawaybr.frete.domain;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -21,13 +21,13 @@ public final class CertificateSslManager {
 
 	private String keyStorePath = "C:\\Users\\nicho\\Downloads\\server-keystore.jks";
 	private final char[] keyStore = "server-keystore-p455w0rd".toCharArray();
-	private Certificate certificate;
+	private CertificateKeystore certificate;
 
 	public CertificateSslManager() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public CertificateSslManager(Certificate certificate) {
+	public CertificateSslManager(CertificateKeystore certificate) {
 		this.certificate = certificate;
 	}
 
@@ -35,7 +35,7 @@ public final class CertificateSslManager {
 		this.keyStorePath = keyStorePath;
 	}
 
-	public void certificate(Certificate certificate) {
+	public void certificate(CertificateKeystore certificate) {
 		this.certificate = certificate;
 	}
 

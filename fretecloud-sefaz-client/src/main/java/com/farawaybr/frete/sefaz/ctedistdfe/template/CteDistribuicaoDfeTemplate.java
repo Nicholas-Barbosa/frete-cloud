@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.farawaybr.frete.domain.certificate.Certificate;
-import com.farawaybr.frete.domain.certificate.CertificateSslManager;
+import com.farawaybr.frete.domain.CertificateKeystore;
+import com.farawaybr.frete.domain.CertificateSslManager;
 import com.farawaybr.frete.formatmapper.xml.XmlMapperTemplate;
 import com.farawaybr.frete.sefaz.ctedistdfe.CteDistDfeOperations;
 import com.farawaybr.frete.sefaz.ctedistdfe.CteDistribuicaoDfeProperties;
@@ -39,7 +39,7 @@ public class CteDistribuicaoDfeTemplate implements CteDistDfeOperations {
 	public void fetch() {
 		log.info("requesting to " + cteDistribuicaoDfeProperties.getUrl());
 
-		Certificate certificate = new Certificate(
+		CertificateKeystore certificate = new CertificateKeystore(
 				"C:\\Users\\nicho\\Downloads\\CDG COMPONENTES AUTOMOTIVOS LTDA09512164000172.pfx",
 				new char[] { 'M', '@', 's', 't', 'e', 'r', '!', '@', '#' }, "09512164000172");
 		certificateSslManager.certificate(certificate);
