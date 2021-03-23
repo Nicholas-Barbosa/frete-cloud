@@ -26,7 +26,7 @@ public class CteDistribuicaoDfeTemplate {
 	}
 
 	public void fetch() {
-
+		certificates.parallelStream().forEach(this::fetch);
 	}
 
 	public CteDistribuicaoDfeTemplate certificates(Set<CertificateKeystore> certificates) {
