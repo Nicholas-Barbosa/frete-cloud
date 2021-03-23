@@ -18,7 +18,6 @@ public class KeyTrustStoreLoader implements KeyTrustStoreLoaderOperations {
 
 	@Override
 	public void load(KeyStore keyStore) {
-		// TODO Auto-generated method stub
 
 	}
 
