@@ -1,67 +1,36 @@
 package com.farawaybr.frete.sefaz.ctedistdfe.template;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.stereotype.Component;
 
 import com.farawaybr.frete.domain.CertificateKeystore;
-import com.farawaybr.frete.domain.CertificateSslManager;
-import com.farawaybr.frete.formatmapper.xml.XmlMapperTemplate;
-import com.farawaybr.frete.sefaz.ctedistdfe.CteDistDfeOperations;
-import com.farawaybr.frete.sefaz.ctedistdfe.CteDistribuicaoDfeProperties;
-import com.farawaybr.frete.sefaz.ctedistdfe.template.xml.CteDistDfeRequestTemplateXml;
-import com.farawaybr.frete.sefaz.ctedistdfe.template.xml.CteDistDfeRequestTemplateXml.DistNsuTemplate;
+import com.farawaybr.frete.sefaz.properties.SefazProperties;
 
 @Component
-public class CteDistribuicaoDfeTemplate implements CteDistDfeOperations {
+public class CteDistribuicaoDfeTemplate {
 
-	private final Logger log = LoggerFactory.getLogger(CteDistribuicaoDfeTemplate.class);
+	private final SefazProperties sefazProperties;
 
-	private final CteDistribuicaoDfeProperties cteDistribuicaoDfeProperties;
+	private Set<CertificateKeystore> certificates;
 
-	private final CertificateSslManager certificateSslManager;
-
-	private final XmlMapperTemplate xmlMapperTemplate;
-
-	public CteDistribuicaoDfeTemplate(CteDistribuicaoDfeProperties cteDistribuicaoDfeProperties,
-			XmlMapperTemplate xmlMapperTemplate) {
+	public CteDistribuicaoDfeTemplate(SefazProperties sefazProperties, Set<CertificateKeystore> certificates) {
 		super();
-		this.cteDistribuicaoDfeProperties = cteDistribuicaoDfeProperties;
-		this.certificateSslManager = new CertificateSslManager();
-		this.xmlMapperTemplate = xmlMapperTemplate;
+		this.sefazProperties = sefazProperties;
+		this.certificates = certificates;
+	}
+
+	public void fetch(CertificateKeystore certificate) {
+
 	}
 
 	public void fetch() {
-		log.info("requesting to " + cteDistribuicaoDfeProperties.getUrl());
-
-		CertificateKeystore certificate = new CertificateKeystore(
-				"C:\\Users\\nicho\\Downloads\\CDG COMPONENTES AUTOMOTIVOS LTDA09512164000172.pfx",
-				new char[] { 'M', '@', 's', 't', 'e', 'r', '!', '@', '#' }, "09512164000172");
-		certificateSslManager.certificate(certificate);
-
-		try (CloseableHttpClient httpclient = certificateSslManager.httpClient()) {
-			CteDistDfeRequestTemplateXml reqeustTemplate = new CteDistDfeRequestTemplateXml("1", "41",
-					certificate.getCnpj(), new DistNsuTemplate("00000000000000"));
-			HttpPost post = new HttpPost(cteDistribuicaoDfeProperties.getUrl());
-
-			String xml = xmlMapperTemplate.<CteDistDfeRequestTemplateXml>serialize(reqeustTemplate);
-
-			post.setEntity(new ByteArrayEntity(xml.getBytes("UTF-8")));
-			post.setHeader("Content-Type", "application/soap+xml");
-			
-			CloseableHttpResponse httpResponse = httpclient.execute(post);
-			
-			HttpEntity entity = httpResponse.getEntity();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
 	}
 
+	public CteDistribuicaoDfeTemplate certificates(Set<CertificateKeystore> certificates) {
+		certificates = new HashSet<>(certificates);
+		return this;
+	}
 }

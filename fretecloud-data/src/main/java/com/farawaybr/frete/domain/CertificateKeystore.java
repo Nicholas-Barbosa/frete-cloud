@@ -1,11 +1,8 @@
 package com.farawaybr.frete.domain;
 
 import java.io.File;
-import java.io.IOException;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
+import java.util.Arrays;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
@@ -29,35 +26,63 @@ public final class CertificateKeystore {
 		return cnpj;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cnpj == null) ? 0 : cnpj.hashCode());
+		result = prime * result + Arrays.hashCode(password);
+		result = prime * result + ((path == null) ? 0 : path.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CertificateKeystore other = (CertificateKeystore) obj;
+		if (cnpj == null) {
+			if (other.cnpj != null)
+				return false;
+		} else if (!cnpj.equals(other.cnpj))
+			return false;
+		if (!Arrays.equals(password, other.password))
+			return false;
+		if (path == null) {
+			if (other.path != null)
+				return false;
+		} else if (!path.equals(other.path))
+			return false;
+		return true;
+
+	}
+
+	@Override
+	public String toString() {
+		return "CertificateKeystore [ cnpj=" + cnpj + "]";
+	}
+
 	public final class KeystoreLoader implements KeystoreLoaderOperations {
 
 		@Override
-		public KeyStore load() {
-			try {
-				return KeyStore.getInstance(new File(path), password);
-			} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
+		public KeyStore loadKeystore() throws Exception {
+			return KeyStore.getInstance(new File(path), password);
+
 		}
 
-		public KeyManagerFactory loadKeyManager() {
-			try {
-				KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-				kmf.init(load(), password);
-				return kmf;
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			return null;
+		public KeyManagerFactory loadKeyManager() throws Exception {
+			KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+			kmf.init(loadKeystore(), password);
+			return kmf;
 
 		}
 
 		@Override
-		public KeyManager[] keysManager() {
+		public KeyManager[] keysManager() throws Exception {
 			return loadKeyManager().getKeyManagers();
 		}
 

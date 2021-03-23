@@ -7,9 +7,9 @@ import javax.net.ssl.KeyManagerFactory;
 
 public interface KeystoreLoaderOperations {
 
-	KeyStore load();
+	KeyStore loadKeystore()throws Exception;
 
-	KeyManagerFactory loadKeyManager();
+	KeyManagerFactory loadKeyManager()throws Exception;
 	
-	KeyManager[] keysManager();
+	KeyManager[] keysManager()throws Exception;
 }
