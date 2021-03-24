@@ -1,10 +1,13 @@
-package com.farawaybr.frete.sefaz.ctedistdfe.template.xml;
+package com.farawaybr.frete.sefaz.ctedistdfe.template;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 @JacksonXmlRootElement(localName = "distDFeInt", namespace = "http://www.portalfiscal.inf.br/cte")
-public class CteDistDfeRequestTemplateXml {
+public class CteDistDfeRequestPayload {
+
+	@JacksonXmlProperty(isAttribute = true)
+	private String versao = "1.00";
 
 	@JacksonXmlProperty(namespace = "http://www.portalfiscal.inf.br/cte")
 	private String tpAmb;
@@ -18,7 +21,7 @@ public class CteDistDfeRequestTemplateXml {
 	@JacksonXmlProperty(localName = "distNSU", namespace = "http://www.portalfiscal.inf.br/cte")
 	private DistNsuTemplate distNsu;
 
-	public CteDistDfeRequestTemplateXml(String tpAmb, String ufAutor, String cnpj, DistNsuTemplate distNsu) {
+	public CteDistDfeRequestPayload(String tpAmb, String ufAutor, String cnpj, DistNsuTemplate distNsu) {
 		super();
 		this.tpAmb = tpAmb;
 		this.ufAutor = ufAutor;
@@ -26,8 +29,12 @@ public class CteDistDfeRequestTemplateXml {
 		this.distNsu = distNsu;
 	}
 
-	public CteDistDfeRequestTemplateXml() {
+	public CteDistDfeRequestPayload() {
 		// TODO Auto-generated constructor stub
+	}
+
+	public String getVersao() {
+		return versao;
 	}
 
 	public String getTpAmb() {
