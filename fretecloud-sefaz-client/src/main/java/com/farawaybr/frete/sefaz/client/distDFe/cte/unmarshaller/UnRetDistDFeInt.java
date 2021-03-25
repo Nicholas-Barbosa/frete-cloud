@@ -7,15 +7,34 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class UnRetDistDFeInt {
 
 	@XmlElement(namespace = "http://www.portalfiscal.inf.br/cte")
-	private String xMotivo;
+	private String tpAmb;
 	@XmlElement(namespace = "http://www.portalfiscal.inf.br/cte")
 	private String cStat;
+	@XmlElement(namespace = "http://www.portalfiscal.inf.br/cte")
+	private String xMotivo;
+	@XmlElement(namespace = "http://www.portalfiscal.inf.br/cte")
+	private String ultNSU;
+	@XmlElement(namespace = "http://www.portalfiscal.inf.br/cte")
+	private String maxNSU;
 
-	public String getxMotivo() {
-		return xMotivo;
+	public TipoAmbient getTpAmb() {
+		return TipoAmbient.valueOfFromNumeric(tpAmb);
 	}
 
 	public String getcStat() {
 		return cStat;
 	}
+
+	public String getxMotivo() {
+		return xMotivo;
+	}
+
+	public String getUltNSU() {
+		return ultNSU;
+	}
+
+	public String getMaxNSU() {
+		return maxNSU;
+	}
+
 }
