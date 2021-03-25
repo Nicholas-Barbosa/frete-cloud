@@ -16,7 +16,7 @@ class DistConhecimentoClientTest {
 	@Test
 	void test() {
 		try {
-			distCte.send(new CertificateKeystore(
+			distCte.sendAndReceiveFull(new CertificateKeystore(
 					"C:\\Users\\nicho\\Downloads\\CDG COMPONENTES AUTOMOTIVOS LTDA09512164000172.pfx",
 					new char[] { 'M', '@', 's', 't', 'e', 'r', '!', '@', '#' }, "09512164000172", "000000000000000"));
 		} catch (Exception e) {

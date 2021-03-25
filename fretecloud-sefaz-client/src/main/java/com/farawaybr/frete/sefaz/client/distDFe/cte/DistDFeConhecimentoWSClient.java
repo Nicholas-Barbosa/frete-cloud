@@ -1,6 +1,14 @@
 
 package com.farawaybr.frete.sefaz.client.distDFe.cte;
 
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ws.client.core.WebServiceTemplate;
@@ -17,7 +25,7 @@ import com.farawaybr.frete.sefaz.properties.SefazProperties;
 
 import br.inf.portalfiscal.cte.DistDFeInt;
 
-public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport {
+public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implements DistDFeConhecimentoWSOperations {
 
 	private final Logger log = LoggerFactory.getLogger(DistDFeConhecimentoWSClient.class);
 
@@ -35,7 +43,46 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport {
 		this.distDfeCteFactory = distDfeCteFactory;
 	}
 
-	public UnCteDistResponse send(CertificateKeystore certificateKeystore) throws Exception {
+	/**
+	 * Call sendAndRecive() until max NSU is reached.
+	 * 
+	 * @throws IOException
+	 * @throws NoSuchProviderException
+	 * @throws CertificateException
+	 * @throws KeyStoreException
+	 * @throws NoSuchAlgorithmException
+	 * @throws KeyManagementException
+	 * @throws UnrecoverableKeyException
+	 * 
+	 */
+	@Override
+	public void sendAndReceiveFull(CertificateKeystore certificateKeystore)
+			throws UnrecoverableKeyException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException,
+			CertificateException, NoSuchProviderException, IOException {
+		String status = null;
+		do {
+
+			UnCteDistResponse response = sendAndReceive(certificateKeystore);
+			status = response == null ? null : response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getcStat();
+
+		} while (status != null);
+	}
+
+	/**
+	 * Request ctes to sefaz.
+	 * 
+	 * @throws IOException
+	 * @throws NoSuchProviderException
+	 * @throws CertificateException
+	 * @throws KeyStoreException
+	 * @throws NoSuchAlgorithmException
+	 * @throws UnrecoverableKeyException
+	 * @throws KeyManagementException
+	 */
+	@Override
+	public UnCteDistResponse sendAndReceive(CertificateKeystore certificateKeystore)
+			throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, CertificateException,
+			NoSuchProviderException, IOException, KeyManagementException {
 		log.info("Sending request to " + getDefaultUri() + "...");
 
 		DistDFeInt distDFeInt = distDfeCteFactory.getRequestObjectInstance();
@@ -61,17 +108,21 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport {
 							sefazProperties.getDocumentoFiscalEletronico().getConhecimento().getSoapAction());
 
 				});
-		log.info("Got reponse from" + getDefaultUri() + ", status: "
-				+ response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getcStat());
-		return response;
+		String status = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getcStat();
+		String xMotivo = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getxMotivo();
+
+		log.info("Got reponse from" + getDefaultUri() + ", status: " + status + " xMotivo: " + xMotivo);
+
+		return status.equals("138") ? response : (status.equals("137") ? response : null);
 	}
 
 	private void setDistDFeIntAttributes(DistDFeInt distDFeInt, CertificateKeystore certificateKeystore) {
-		log.info("Setting attributes to request object...");
+		log.debug("Setting attributes to request object...");
 		distDFeInt.setVersao("1.00");
 		distDFeInt.setTpAmb(TipoAmbient.PRODUCAO.getAmbient());
 		distDFeInt.setCUFAutor("41");
 		distDFeInt.setCNPJ(certificateKeystore.getCnpj());
 		distDfeCteFactory.setUltNsu(certificateKeystore.getNsuToFetch());
 	}
+
 }
