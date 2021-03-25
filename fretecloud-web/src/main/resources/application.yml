@@ -2,8 +2,9 @@ sefaz:
    truststore:
      path: C:\Users\nicho\Downloads\server-keystore.jks
      password: server-keystore-p455w0rd
-   docfe:
+   DFe:
      conhecimento:
       url: https://www1.cte.fazenda.gov.br/CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx
+      soapAction: http://www.portalfiscal.inf.br/cte/wsdl/CTeDistribuicaoDFe/cteDistDFeInteresse
      
   

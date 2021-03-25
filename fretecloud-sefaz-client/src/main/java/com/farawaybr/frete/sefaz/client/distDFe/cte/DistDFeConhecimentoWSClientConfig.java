@@ -12,11 +12,14 @@ public class DistDFeConhecimentoWSClientConfig {
 
 	private final SefazProperties sefazProperties;
 	private final KeyTrustStoreLoader keytrustloader;
+	private final DistDFeCteRequestObjectsFactory distDFeCteRequestObjectsFactory;
 
-	public DistDFeConhecimentoWSClientConfig(SefazProperties sefazProperties, KeyTrustStoreLoader keytrustloader) {
+	public DistDFeConhecimentoWSClientConfig(SefazProperties sefazProperties, KeyTrustStoreLoader keytrustloader,
+			DistDFeCteRequestObjectsFactory distDFeCteRequestObjectsFactory) {
 		super();
 		this.sefazProperties = sefazProperties;
 		this.keytrustloader = keytrustloader;
+		this.distDFeCteRequestObjectsFactory = distDFeCteRequestObjectsFactory;
 	}
 
 	@Bean
@@ -32,13 +35,14 @@ public class DistDFeConhecimentoWSClientConfig {
 		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
 		// this package must match the package in the <generatePackage> specified in
 		// pom.xml
-		marshaller.setContextPaths("com.farawaybr.frete.sefaz.dfe.cte.unmarshaller");
+		marshaller.setContextPaths("com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshaller");
 		return marshaller;
 	}
 
 	@Bean
 	public DistDFeConhecimentoWSClient countryClient(Jaxb2Marshaller marshaller) {
-		DistDFeConhecimentoWSClient client = new DistDFeConhecimentoWSClient(sefazProperties, keytrustloader);
+		DistDFeConhecimentoWSClient client = new DistDFeConhecimentoWSClient(sefazProperties, keytrustloader,
+				distDFeCteRequestObjectsFactory);
 		client.setDefaultUri("https://www1.cte.fazenda.gov.br/CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx");
 		client.setMarshaller(marshaller());
 		client.setUnmarshaller(unmarshaller());

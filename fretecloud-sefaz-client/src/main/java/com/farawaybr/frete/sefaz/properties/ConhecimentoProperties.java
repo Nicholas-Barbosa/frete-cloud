@@ -6,12 +6,22 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ConhecimentoProperties {
 
 	private String url;
+	private String soapAction;
+
+	public String getUrl() {
+		return url;
+	}
 
 	public void setUrl(String url) {
 		this.url = url;
 	}
 
-	public String getUrl() {
-		return url;
+	public String getSoapAction() {
+		return soapAction;
 	}
+
+	public void setSoapAction(String soapAction) {
+		this.soapAction = soapAction;
+	}
+
 }

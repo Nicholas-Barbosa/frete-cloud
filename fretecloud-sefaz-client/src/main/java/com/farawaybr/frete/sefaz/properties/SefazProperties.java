@@ -10,7 +10,7 @@ public class SefazProperties {
 
 	@NestedConfigurationProperty
 	private Truststore truststore;
-
+	@NestedConfigurationProperty
 	private DocumentosFiscalEletronicoProperties documentoFiscalEletronico;
 
 	public void setTruststore(Truststore truststore) {
@@ -25,7 +25,7 @@ public class SefazProperties {
 		return documentoFiscalEletronico;
 	}
 
-	public void setDocfe(DocumentosFiscalEletronicoProperties documentoFiscalEletronico) {
+	public void setDFe(DocumentosFiscalEletronicoProperties documentoFiscalEletronico) {
 		this.documentoFiscalEletronico = documentoFiscalEletronico;
 	}
 
@@ -50,23 +50,10 @@ public class SefazProperties {
 		}
 	}
 
-	@ConfigurationProperties(prefix = "cte")
-	public static class CteProperties {
-
-		private String url;
-
-		public void setUrl(String url) {
-			this.url = url;
-		}
-
-		public String getUrl() {
-			return url;
-		}
-	}
-
-	@ConfigurationProperties(prefix = "docfe")
+	@ConfigurationProperties(prefix = "DFe")
 	public static class DocumentosFiscalEletronicoProperties {
 
+		@NestedConfigurationProperty
 		private ConhecimentoProperties conhecimento;
 
 		public ConhecimentoProperties getConhecimento() {
