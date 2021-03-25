@@ -1,4 +1,4 @@
-package com.farawaybr.frete.sefaz.dfe.cte.unmarshaller;
+package com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshaller;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

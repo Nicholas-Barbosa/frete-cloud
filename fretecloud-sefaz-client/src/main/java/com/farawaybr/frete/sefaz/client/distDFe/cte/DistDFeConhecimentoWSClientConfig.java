@@ -1,20 +1,19 @@
-package com.farawaybr.frete.sefaz.dfe.cte.config;
+package com.farawaybr.frete.sefaz.client.distDFe.cte;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
-import com.farawaybr.frete.sefaz.dfe.cte.DistConhecimentoClient;
 import com.farawaybr.frete.sefaz.keystore.KeyTrustStoreLoader;
 import com.farawaybr.frete.sefaz.properties.SefazProperties;
 
 @Configuration
-public class DistConhecimentoClientConfig {
+public class DistDFeConhecimentoWSClientConfig {
 
 	private final SefazProperties sefazProperties;
 	private final KeyTrustStoreLoader keytrustloader;
 
-	public DistConhecimentoClientConfig(SefazProperties sefazProperties, KeyTrustStoreLoader keytrustloader) {
+	public DistDFeConhecimentoWSClientConfig(SefazProperties sefazProperties, KeyTrustStoreLoader keytrustloader) {
 		super();
 		this.sefazProperties = sefazProperties;
 		this.keytrustloader = keytrustloader;
@@ -38,8 +37,8 @@ public class DistConhecimentoClientConfig {
 	}
 
 	@Bean
-	public DistConhecimentoClient countryClient(Jaxb2Marshaller marshaller) {
-		DistConhecimentoClient client = new DistConhecimentoClient(sefazProperties, keytrustloader);
+	public DistDFeConhecimentoWSClient countryClient(Jaxb2Marshaller marshaller) {
+		DistDFeConhecimentoWSClient client = new DistDFeConhecimentoWSClient(sefazProperties, keytrustloader);
 		client.setDefaultUri("https://www1.cte.fazenda.gov.br/CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx");
 		client.setMarshaller(marshaller());
 		client.setUnmarshaller(unmarshaller());

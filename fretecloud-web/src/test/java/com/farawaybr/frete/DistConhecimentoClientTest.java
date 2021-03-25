@@ -5,13 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.farawaybr.frete.domain.CertificateKeystore;
-import com.farawaybr.frete.sefaz.dfe.cte.DistConhecimentoClient;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.DistDFeConhecimentoWSClient;
 
 @SpringBootTest
 class DistConhecimentoClientTest {
 
 	@Autowired
-	private DistConhecimentoClient distCte;
+	private DistDFeConhecimentoWSClient distCte;
 
 	@Test
 	void test() {
