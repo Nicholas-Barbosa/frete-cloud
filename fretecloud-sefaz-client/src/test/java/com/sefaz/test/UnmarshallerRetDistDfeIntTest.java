@@ -6,7 +6,7 @@ import javax.xml.bind.JAXBContext;
 
 import org.junit.jupiter.api.Test;
 
-import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshaller.UnCteDistResponse;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.UnCteDistResponse;
 
 import br.inf.portalfiscal.cte.DistDFeInt;
 import br.inf.portalfiscal.cte.DistDFeInt.DistNSU;

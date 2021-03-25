@@ -9,7 +9,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
 import com.farawaybr.frete.domain.CertificateKeystore;
-import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshaller.UnCteDistResponse;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.UnCteDistResponse;
 
 public interface DistDFeConhecimentoWSOperations {
 
@@ -18,5 +18,5 @@ public interface DistDFeConhecimentoWSOperations {
 
 	public UnCteDistResponse sendAndReceive() throws KeyManagementException, NoSuchAlgorithmException;
 
-	public void sendAndReceiveFull() throws KeyManagementException, NoSuchAlgorithmException;
+	public void unzipSendAndReceiveFull() throws KeyManagementException, NoSuchAlgorithmException;
 }

@@ -19,7 +19,7 @@ class DistConhecimentoClientTest {
 			distCte.setDefaultCertificateKeystore(new CertificateKeystore(
 					"C:\\Users\\nicho\\Downloads\\CDG COMPONENTES AUTOMOTIVOS LTDA09512164000172.pfx",
 					new char[] { 'M', '@', 's', 't', 'e', 'r', '!', '@', '#' }, "09512164000172", "000000000000000"));
-			distCte.sendAndReceiveFull();
+			distCte.unzipSendAndReceiveFull();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

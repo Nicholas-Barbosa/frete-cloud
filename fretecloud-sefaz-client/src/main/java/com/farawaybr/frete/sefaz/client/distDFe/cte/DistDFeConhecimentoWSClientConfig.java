@@ -35,7 +35,7 @@ public class DistDFeConhecimentoWSClientConfig {
 		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
 		// this package must match the package in the <generatePackage> specified in
 		// pom.xml
-		marshaller.setContextPaths("com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshaller");
+		marshaller.setContextPaths("com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal");
 		return marshaller;
 	}
 

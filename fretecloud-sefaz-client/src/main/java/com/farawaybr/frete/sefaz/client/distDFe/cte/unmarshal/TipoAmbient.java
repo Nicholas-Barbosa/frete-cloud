@@ -1,4 +1,4 @@
-package com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshaller;
+package com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal;
 
 import java.util.Arrays;
 
