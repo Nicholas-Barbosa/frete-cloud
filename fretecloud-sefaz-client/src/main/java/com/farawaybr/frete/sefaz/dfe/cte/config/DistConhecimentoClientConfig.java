@@ -25,7 +25,15 @@ public class DistConhecimentoClientConfig {
 		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
 		// this package must match the package in the <generatePackage> specified in
 		// pom.xml
-		marshaller.setContextPath("com.example.consumingwebservice.wsdl");
+		marshaller.setContextPaths("com.example.consumingwebservice.wsdl", "br.inf.portalfiscal.cte");
+		return marshaller;
+	}
+
+	public Jaxb2Marshaller unmarshaller() {
+		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+		// this package must match the package in the <generatePackage> specified in
+		// pom.xml
+		marshaller.setContextPaths("com.farawaybr.frete.sefaz.dfe.cte.unmarshaller");
 		return marshaller;
 	}
 
@@ -33,8 +41,8 @@ public class DistConhecimentoClientConfig {
 	public DistConhecimentoClient countryClient(Jaxb2Marshaller marshaller) {
 		DistConhecimentoClient client = new DistConhecimentoClient(sefazProperties, keytrustloader);
 		client.setDefaultUri("https://www1.cte.fazenda.gov.br/CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx");
-		client.setMarshaller(marshaller);
-		client.setUnmarshaller(marshaller);
+		client.setMarshaller(marshaller());
+		client.setUnmarshaller(unmarshaller());
 		return client;
 	}
 }

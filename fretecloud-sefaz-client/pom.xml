@@ -46,6 +46,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web-services</artifactId>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/xerces/xercesImpl -->
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.6.2-jaxb-1.0.6</version>
+		</dependency>
+
 	</dependencies>
 	<!-- tag::profile[] -->
 	<profiles>
@@ -91,6 +99,25 @@
 					<schemaIncludes>
 						<schemaInclude>*.wsdl</schemaInclude>
 					</schemaIncludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>2.5.0</version>
+				<executions>
+					<execution>
+						<id>xjc</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<sources>
+						<source>src/main/resources/xsd/distDFeInt_v1.00.xsd</source>
+						<source>src/main/resources/xsd/retDistDFeInt_v1.00.xsd</source>
+					</sources>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:cteDistDFeInteresse
+	xmlns:ns2="http://www.portalfiscal.inf.br/cte/wsdl/CTeDistribuicaoDFe">
+	<ns2:cteDadosMsg>
+		<ns2:distDFeInt versao="1.00">
+			<ns2:tpAmb>1</ns2:tpAmb>
+			<ns2:cUFAutor>41</ns2:cUFAutor>
+			<ns2:CNPJ>09512164000172</ns2:CNPJ>
+			<ns2:distNSU>
+				<ns2:ultNsu>000000000000000</ns2:ultNsu>
+			</ns2:distNSU>
+		</ns2:distDFeInt>
+	</ns2:cteDadosMsg>
+</ns2:cteDistDFeInteresse>
