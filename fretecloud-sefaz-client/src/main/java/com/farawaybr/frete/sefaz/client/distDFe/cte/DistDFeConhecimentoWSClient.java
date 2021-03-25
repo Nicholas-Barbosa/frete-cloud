@@ -35,34 +35,53 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 
 	private final DistDFeCteRequestObjectsFactory distDfeCteFactory;
 
+	private final CloseableHttpClientSslFactory httpClientFactory;
+
+	private CertificateKeystore certificateKeystore;
+
 	public DistDFeConhecimentoWSClient(SefazProperties sefazProperties, KeyTrustStoreLoader keyTrustLoader,
 			DistDFeCteRequestObjectsFactory distDfeCteFactory) {
 		super();
 		this.sefazProperties = sefazProperties;
 		this.keyTrustLoader = keyTrustLoader;
 		this.distDfeCteFactory = distDfeCteFactory;
+		this.httpClientFactory = CloseableHttpClientSslFactory.create();
 	}
 
 	/**
-	 * Call sendAndRecive() until max NSU is reached.
+	 * Set certificate containing keystore for mutual authentication with sefaz.
 	 * 
+	 * @param certificateKeystore
 	 * @throws IOException
 	 * @throws NoSuchProviderException
 	 * @throws CertificateException
 	 * @throws KeyStoreException
 	 * @throws NoSuchAlgorithmException
-	 * @throws KeyManagementException
 	 * @throws UnrecoverableKeyException
-	 * 
 	 */
 	@Override
-	public void sendAndReceiveFull(CertificateKeystore certificateKeystore)
-			throws UnrecoverableKeyException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException,
-			CertificateException, NoSuchProviderException, IOException {
+	public void setDefaultCertificateKeystore(CertificateKeystore certificateKeystore) throws UnrecoverableKeyException,
+			NoSuchAlgorithmException, KeyStoreException, CertificateException, NoSuchProviderException, IOException {
+		log.info("Setting keystore and truststore for mutual authentication...");
+		this.certificateKeystore = certificateKeystore;
+
+		httpClientFactory.setKeyManager(certificateKeystore.new KeystoreLoader().keysManager())
+				.setTrustManager(keyTrustLoader.trustManager());
+		;
+	}
+
+	/**
+	 * Call sendAndRecive() until max NSU is reached.
+	 * 
+	 * @throws NoSuchAlgorithmException
+	 * @throws KeyManagementException
+	 */
+	@Override
+	public void sendAndReceiveFull() throws KeyManagementException, NoSuchAlgorithmException {
 		String status = null;
 		do {
 
-			UnCteDistResponse response = sendAndReceive(certificateKeystore);
+			UnCteDistResponse response = sendAndReceive();
 			status = response == null ? null : response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getcStat();
 
 		} while (status != null);
@@ -71,18 +90,11 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 	/**
 	 * Request ctes to sefaz.
 	 * 
-	 * @throws IOException
-	 * @throws NoSuchProviderException
-	 * @throws CertificateException
-	 * @throws KeyStoreException
 	 * @throws NoSuchAlgorithmException
-	 * @throws UnrecoverableKeyException
 	 * @throws KeyManagementException
 	 */
 	@Override
-	public UnCteDistResponse sendAndReceive(CertificateKeystore certificateKeystore)
-			throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, CertificateException,
-			NoSuchProviderException, IOException, KeyManagementException {
+	public UnCteDistResponse sendAndReceive() throws KeyManagementException, NoSuchAlgorithmException {
 		log.info("Sending request to " + getDefaultUri() + "...");
 
 		DistDFeInt distDFeInt = distDfeCteFactory.getRequestObjectInstance();
@@ -92,13 +104,8 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 
 		HttpComponentsMessageSender httpComponentsMessageSender = new HttpComponentsMessageSender();
 
-		log.info("Setting keystore and truststore to host: " + getDefaultUri() + "...");
-		CloseableHttpClientSslFactory httpClientFactory = CloseableHttpClientSslFactory.create();
-
-		httpClientFactory.setKeyManager(certificateKeystore.new KeystoreLoader().keysManager())
-				.setTrustManager(keyTrustLoader.trustManager());
-
 		httpComponentsMessageSender.setHttpClient(httpClientFactory.getCloseableHttpClient());
+
 		webServiceTemplate.setMessageSender(httpComponentsMessageSender);
 		UnCteDistResponse response = (UnCteDistResponse) getWebServiceTemplate()
 

@@ -13,9 +13,10 @@ import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshaller.UnCteDistRespon
 
 public interface DistDFeConhecimentoWSOperations {
 
-	public UnCteDistResponse sendAndReceive(CertificateKeystore certificateKeystore) throws Exception;
+	public void setDefaultCertificateKeystore(CertificateKeystore certificateKeystore) throws UnrecoverableKeyException,
+			NoSuchAlgorithmException, KeyStoreException, CertificateException, NoSuchProviderException, IOException;
 
-	public void sendAndReceiveFull(CertificateKeystore certificateKeystore)
-			throws UnrecoverableKeyException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException,
-			CertificateException, NoSuchProviderException, IOException;
+	public UnCteDistResponse sendAndReceive() throws KeyManagementException, NoSuchAlgorithmException;
+
+	public void sendAndReceiveFull() throws KeyManagementException, NoSuchAlgorithmException;
 }

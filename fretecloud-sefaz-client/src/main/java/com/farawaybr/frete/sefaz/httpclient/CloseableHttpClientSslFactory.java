@@ -51,6 +51,6 @@ public class CloseableHttpClientSslFactory {
 
 			return sslcontext;
 		}
-		throw new RuntimeException("You muest set keyManager and trustManager!");
+		throw new MissingKeystoreObject("You must set keyManager and trustManager!");
 	}
 }
