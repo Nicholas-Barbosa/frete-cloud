@@ -98,7 +98,7 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 			zippedResponses.add(response);
 		} while (status != null);
 		log.info("Finished! All ctes were obtained!");
-		
+
 	}
 
 	/**
