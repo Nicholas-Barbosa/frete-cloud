@@ -85,20 +85,20 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 	 * @throws KeyManagementException
 	 */
 	@Override
-	public void unzipSendAndReceiveFull() throws KeyManagementException, NoSuchAlgorithmException {
+	public List<UnCteDistResponse> unzipSendAndReceiveFull() throws KeyManagementException, NoSuchAlgorithmException {
 		String status = null;
-		List<UnCteDistResponse> zippedResponses = new ArrayList<>();
+		List<UnCteDistResponse> unCteDistResponses = new ArrayList<>();
 		do {
 
 			UnCteDistResponse response = sendAndReceive();
 			status = response == null ? null : response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getcStat();
 			if (response != null) {
-				zippedResponses.add(response);
+				unCteDistResponses.add(response);
 			}
-			zippedResponses.add(response);
+			unCteDistResponses.add(response);
 		} while (status != null);
 		log.info("Finished! All ctes were obtained!");
-
+		return unCteDistResponses;
 	}
 
 	/**

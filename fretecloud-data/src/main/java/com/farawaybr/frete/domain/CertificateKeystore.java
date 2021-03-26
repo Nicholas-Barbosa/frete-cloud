@@ -13,18 +13,20 @@ import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
+import javax.persistence.Entity;
 
 import com.farawaybr.frete.KeystoreLoaderOperations;
 
-public final class CertificateKeystore {
+@Entity
+public final class CertificateKeystore extends SuperEntity {
 
 	private final String path;
 	private final char[] password;
 	private final String cnpj;
 	private String nsuToFetch;
 
-	public CertificateKeystore(String path, char[] password, String cnpj, String nsuToFetch) {
-		super();
+	public CertificateKeystore(Long id,String path, char[] password, String cnpj, String nsuToFetch) {
+		super(id);
 		this.path = path;
 		this.password = password;
 		this.cnpj = cnpj;

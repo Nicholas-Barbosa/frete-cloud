@@ -1,3 +1,11 @@
+spring:  profiles:    active:    - dev
+
+---
+spring:  config:    activate:      on-profile:      - dev  datasource:    url: jdbc:mysql://localhost:3306/fretecloud?useTimezone=true&serverTimezone=UTC
+    username: root
+    password: Vicinitech12
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:    hibernate:      ddl-auto: update    
 sefaz:
    truststore:
      path: C:\Users\nicho\Downloads\server-keystore.jks
@@ -6,5 +14,5 @@ sefaz:
      conhecimento:
       url: https://www1.cte.fazenda.gov.br/CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx
       soapAction: http://www.portalfiscal.inf.br/cte/wsdl/CTeDistribuicaoDFe/cteDistDFeInteresse
-     
+ 
   
