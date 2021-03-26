@@ -16,7 +16,7 @@ class Base64Test {
 	@Test
 	void encode() {
 		String originalInput = "test input";
-		String encodedString = Base64.getEncoder().encodeToString(originalInput.getBytes());
+		String encodedString = Base64.getEncoder(). encodeToString(originalInput.getBytes());
 		assertEquals("dGVzdCBpbnB1dA==", encodedString);
 	}
 
