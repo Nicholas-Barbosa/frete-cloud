@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bindings version="2.1" xmlns="http://java.sun.com/xml/ns/jaxb">
+  <!--
+
+Este arquivo foi gerado pela Arquitetura JavaTM para Implementação de Referência (JAXB) de Bind XML, v2.3.2 
+Consulte <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
+Todas as modificações neste arquivo serão perdidas após a recompilação do esquema de origem. 
+Gerado em: 2021.03.26 às 04:08:20 PM BRT 
+
+  -->
+  <bindings scd="x-schema::tns" xmlns:tns="http://www.portalfiscal.inf.br/cte">
+    <schemaBindings map="false">
+      <package name="br.inf.portalfiscal.cte"/>
+    </schemaBindings>
+    <bindings scd="tns:distDFeInt">
+      <class ref="br.inf.portalfiscal.cte.DistDFeInt"/>
+    </bindings>
+    <bindings scd="tns:retDistDFeInt">
+      <class ref="br.inf.portalfiscal.cte.RetDistDFeInt"/>
+    </bindings>
+  </bindings>
+</bindings>
+

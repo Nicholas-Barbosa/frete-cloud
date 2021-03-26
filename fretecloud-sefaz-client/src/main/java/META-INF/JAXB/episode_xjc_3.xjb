@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bindings version="2.1" xmlns="http://java.sun.com/xml/ns/jaxb">
+  <!--
+
+Este arquivo foi gerado pela Arquitetura JavaTM para Implementação de Referência (JAXB) de Bind XML, v2.3.2 
+Consulte <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
+Todas as modificações neste arquivo serão perdidas após a recompilação do esquema de origem. 
+Gerado em: 2021.03.26 às 04:16:54 PM BRT 
+
+  -->
+  <bindings scd="x-schema::tns" xmlns:tns="http://www.w3.org/2000/09/xmldsig#">
+    <schemaBindings map="false">
+      <package name="org.w3._2000._09.xmldsig_"/>
+    </schemaBindings>
+    <bindings scd="~tns:ReferenceType">
+      <class ref="org.w3._2000._09.xmldsig_.ReferenceType"/>
+    </bindings>
+    <bindings scd="~tns:SignedInfoType">
+      <class ref="org.w3._2000._09.xmldsig_.SignedInfoType"/>
+    </bindings>
+    <bindings scd="~tns:SignatureType">
+      <class ref="org.w3._2000._09.xmldsig_.SignatureType"/>
+    </bindings>
+    <bindings scd="~tns:SignatureValueType">
+      <class ref="org.w3._2000._09.xmldsig_.SignatureValueType"/>
+    </bindings>
+    <bindings scd="~tns:TransformsType">
+      <class ref="org.w3._2000._09.xmldsig_.TransformsType"/>
+    </bindings>
+    <bindings scd="~tns:TransformType">
+      <class ref="org.w3._2000._09.xmldsig_.TransformType"/>
+    </bindings>
+    <bindings scd="~tns:KeyInfoType">
+      <class ref="org.w3._2000._09.xmldsig_.KeyInfoType"/>
+    </bindings>
+    <bindings scd="~tns:X509DataType">
+      <class ref="org.w3._2000._09.xmldsig_.X509DataType"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="http://www.portalfiscal.inf.br/cte">
+    <schemaBindings map="false">
+      <package name="br.inf.portalfiscal.cte"/>
+    </schemaBindings>
+    <bindings scd="~tns:TUnidCarga">
+      <class ref="br.inf.portalfiscal.cte.TUnidCarga"/>
+    </bindings>
+    <bindings scd="~tns:TUnidadeTransp">
+      <class ref="br.inf.portalfiscal.cte.TUnidadeTransp"/>
+    </bindings>
+    <bindings scd="~tns:TImpOS">
+      <class ref="br.inf.portalfiscal.cte.TImpOS"/>
+    </bindings>
+    <bindings scd="~tns:TImp">
+      <class ref="br.inf.portalfiscal.cte.TImp"/>
+    </bindings>
+    <bindings scd="~tns:TRetEnviCTe">
+      <class ref="br.inf.portalfiscal.cte.TRetEnviCTe"/>
+    </bindings>
+    <bindings scd="~tns:TCTeOS">
+      <class ref="br.inf.portalfiscal.cte.TCTeOS"/>
+    </bindings>
+    <bindings scd="~tns:TProtGTVe">
+      <class ref="br.inf.portalfiscal.cte.TProtGTVe"/>
+    </bindings>
+    <bindings scd="~tns:TProtCTeOS">
+      <class ref="br.inf.portalfiscal.cte.TProtCTeOS"/>
+    </bindings>
+    <bindings scd="~tns:TGTVe">
+      <class ref="br.inf.portalfiscal.cte.TGTVe"/>
+    </bindings>
+    <bindings scd="~tns:TProtCTe">
+      <class ref="br.inf.portalfiscal.cte.TProtCTe"/>
+    </bindings>
+    <bindings scd="~tns:TCTe">
+      <class ref="br.inf.portalfiscal.cte.TCTe"/>
+    </bindings>
+    <bindings scd="tns:cteProc">
+      <class ref="br.inf.portalfiscal.cte.CteProc"/>
+    </bindings>
+    <bindings scd="~tns:TRetCTe">
+      <class ref="br.inf.portalfiscal.cte.TRetCTe"/>
+    </bindings>
+    <bindings scd="~tns:TRetGTVe">
+      <class ref="br.inf.portalfiscal.cte.TRetGTVe"/>
+    </bindings>
+    <bindings scd="~tns:TRetCTeOS">
+      <class ref="br.inf.portalfiscal.cte.TRetCTeOS"/>
+    </bindings>
+    <bindings scd="~tns:TEnviCTe">
+      <class ref="br.inf.portalfiscal.cte.TEnviCTe"/>
+    </bindings>
+    <bindings scd="~tns:TEndeEmi">
+      <class ref="br.inf.portalfiscal.cte.TEndeEmi"/>
+    </bindings>
+    <bindings scd="~tns:TEndereco">
+      <class ref="br.inf.portalfiscal.cte.TEndereco"/>
+    </bindings>
+    <bindings scd="~tns:TEndernac">
+      <class ref="br.inf.portalfiscal.cte.TEndernac"/>
+    </bindings>
+    <bindings scd="~tns:TEndOrg">
+      <class ref="br.inf.portalfiscal.cte.TEndOrg"/>
+    </bindings>
+    <bindings scd="~tns:TLocal">
+      <class ref="br.inf.portalfiscal.cte.TLocal"/>
+    </bindings>
+    <bindings scd="~tns:TEndReEnt">
+      <class ref="br.inf.portalfiscal.cte.TEndReEnt"/>
+    </bindings>
+    <bindings scd="~tns:TRespTec">
+      <class ref="br.inf.portalfiscal.cte.TRespTec"/>
+    </bindings>
+    <bindings scd="~tns:TUf">
+      <typesafeEnumClass ref="br.inf.portalfiscal.cte.TUf"/>
+    </bindings>
+    <bindings scd="~tns:TUF_sem_EX">
+      <typesafeEnumClass ref="br.inf.portalfiscal.cte.TUFSemEX"/>
+    </bindings>
+  </bindings>
+</bindings>
+

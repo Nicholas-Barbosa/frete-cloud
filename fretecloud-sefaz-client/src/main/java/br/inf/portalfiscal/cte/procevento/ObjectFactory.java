@@ -2,11 +2,11 @@
 // Este arquivo foi gerado pela Arquitetura JavaTM para Implementação de Referência (JAXB) de Bind XML, v2.3.2 
 // Consulte <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
 // Todas as modificações neste arquivo serão perdidas após a recompilação do esquema de origem. 
-// Gerado em: 2021.03.26 às 04:19:47 PM BRT 
+// Gerado em: 2021.03.26 às 04:24:28 PM BRT 
 //
 
 
-package br.inf.portalfiscal.cte;
+package br.inf.portalfiscal.cte.procevento;
 
 import javax.xml.bind.annotation.XmlRegistry;
 
@@ -37,51 +37,67 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DistDFeInt }
+     * Create an instance of {@link TRetEvento }
      * 
      */
-    public DistDFeInt createDistDFeInt() {
-        return new DistDFeInt();
+    public TRetEvento createTRetEvento() {
+        return new TRetEvento();
     }
 
     /**
-     * Create an instance of {@link RetDistDFeInt }
+     * Create an instance of {@link TEvento }
      * 
      */
-    public RetDistDFeInt createRetDistDFeInt() {
-        return new RetDistDFeInt();
+    public TEvento createTEvento() {
+        return new TEvento();
     }
 
     /**
-     * Create an instance of {@link RetDistDFeInt.LoteDistDFeInt }
+     * Create an instance of {@link TEvento.InfEvento }
      * 
      */
-    public RetDistDFeInt.LoteDistDFeInt createRetDistDFeIntLoteDistDFeInt() {
-        return new RetDistDFeInt.LoteDistDFeInt();
+    public TEvento.InfEvento createTEventoInfEvento() {
+        return new TEvento.InfEvento();
     }
 
     /**
-     * Create an instance of {@link DistDFeInt.DistNSU }
+     * Create an instance of {@link ProcEventoCTe }
      * 
      */
-    public DistDFeInt.DistNSU createDistDFeIntDistNSU() {
-        return new DistDFeInt.DistNSU();
+    public ProcEventoCTe createProcEventoCTe() {
+        return new ProcEventoCTe();
     }
 
     /**
-     * Create an instance of {@link DistDFeInt.ConsNSU }
+     * Create an instance of {@link TProcEvento }
      * 
      */
-    public DistDFeInt.ConsNSU createDistDFeIntConsNSU() {
-        return new DistDFeInt.ConsNSU();
+    public TProcEvento createTProcEvento() {
+        return new TProcEvento();
     }
 
     /**
-     * Create an instance of {@link RetDistDFeInt.LoteDistDFeInt.DocZip }
+     * Create an instance of {@link TRetEvento.InfEvento }
      * 
      */
-    public RetDistDFeInt.LoteDistDFeInt.DocZip createRetDistDFeIntLoteDistDFeIntDocZip() {
-        return new RetDistDFeInt.LoteDistDFeInt.DocZip();
+    public TRetEvento.InfEvento createTRetEventoInfEvento() {
+        return new TRetEvento.InfEvento();
+    }
+
+    /**
+     * Create an instance of {@link TEvento.InfEvento.DetEvento }
+     * 
+     */
+    public TEvento.InfEvento.DetEvento createTEventoInfEventoDetEvento() {
+        return new TEvento.InfEvento.DetEvento();
+    }
+
+    /**
+     * Create an instance of {@link TEvento.InfEvento.InfSolicNFF }
+     * 
+     */
+    public TEvento.InfEvento.InfSolicNFF createTEventoInfEventoInfSolicNFF() {
+        return new TEvento.InfEvento.InfSolicNFF();
     }
 
 }

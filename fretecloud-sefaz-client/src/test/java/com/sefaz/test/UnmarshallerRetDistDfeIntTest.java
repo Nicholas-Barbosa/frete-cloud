@@ -10,7 +10,7 @@ import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.UnCteDistResponse;
 
 import br.inf.portalfiscal.cte.DistDFeInt;
 import br.inf.portalfiscal.cte.DistDFeInt.DistNSU;
-import br.inf.portalfiscal.cte.ret.RetDistDFeInt;
+import br.inf.portalfiscal.cte.RetDistDFeInt;
 
 class UnmarshallerRetDistDfeIntTest {
 

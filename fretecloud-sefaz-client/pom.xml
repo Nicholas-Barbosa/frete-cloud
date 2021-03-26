@@ -113,8 +113,9 @@
 				<configuration>
 					<sources>
 						<source>src/main/resources/xsd/distDFeInt_v1.00.xsd</source>
-						
-
+						<source>src/main/resources/xsd/retDistDFeInt_v1.00.xsd</source>
+						<!-- <source>src/main/resources/xsd/procEventoCTe_v3.00.xsd</source> 
+							<source>src/main/resources/xsd/procCTe_v3.00.xsd</source> -->
 					</sources>
 					<outputDirectory>${basedir}/src/main/java</outputDirectory>
 					<clearOutputDir>false</clearOutputDir>
