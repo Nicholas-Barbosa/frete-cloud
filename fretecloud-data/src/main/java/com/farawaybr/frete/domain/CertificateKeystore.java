@@ -16,6 +16,7 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 import com.farawaybr.frete.KeystoreLoaderOperations;
 
@@ -26,6 +27,7 @@ public final class CertificateKeystore extends SuperEntity {
 	private final char[] password;
 	private final String cnpj;
 
+	@OneToMany(mappedBy = "certificateKeystore")
 	private final Set<StateToSearchDistFeCte> statesToSearch;
 
 	public CertificateKeystore(Long id, String path, char[] password, String cnpj,

@@ -1,13 +1,18 @@
 package com.farawaybr.frete.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class StateToSearchDistFeCte extends SuperEntity {
 
 	private String nsuToSearch;
+	@ManyToOne
 	private State state;
 
+	@ManyToOne
+	private CertificateKeystore certificateKeystore;
+	
 	public StateToSearchDistFeCte(Long id, String nsuToSearch, State state) {
 		super(id);
 		this.nsuToSearch = nsuToSearch;

@@ -1,5 +1,5 @@
-spring:  profiles:    active:    - dev
-
+spring:  profiles:    active:    - dev    - load-states
+ibge:   estado:     url: https://servicodados.ibge.gov.br/api/v1/localidades/estados
 ---
 spring:  config:    activate:      on-profile:      - dev  datasource:    url: jdbc:mysql://localhost:3306/fretecloud?useTimezone=true&serverTimezone=UTC
     username: root
