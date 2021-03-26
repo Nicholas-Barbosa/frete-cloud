@@ -92,9 +92,6 @@
 				<configuration>
 					<schemaLanguage>WSDL</schemaLanguage>
 					<generatePackage>com.example.consumingwebservice.wsdl</generatePackage>
-					<!-- <schemas> <schema> <url>http://www.learnwebservices.com/services/hello?WSDL</url> 
-						</schema> </schemas> -->
-					<!-- -->
 					<schemaDirectory>src/main/resources/wsdl</schemaDirectory>
 					<schemaIncludes>
 						<schemaInclude>*.wsdl</schemaInclude>
@@ -116,8 +113,11 @@
 				<configuration>
 					<sources>
 						<source>src/main/resources/xsd/distDFeInt_v1.00.xsd</source>
-						<source>src/main/resources/xsd/retDistDFeInt_v1.00.xsd</source>
+						
+
 					</sources>
+					<outputDirectory>${basedir}/src/main/java</outputDirectory>
+					<clearOutputDir>false</clearOutputDir>
 				</configuration>
 			</plugin>
 		</plugins>

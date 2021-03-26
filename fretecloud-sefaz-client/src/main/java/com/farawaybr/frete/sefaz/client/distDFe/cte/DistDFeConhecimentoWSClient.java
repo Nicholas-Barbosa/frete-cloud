@@ -1,6 +1,7 @@
 
 package com.farawaybr.frete.sefaz.client.distDFe.cte;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -127,6 +128,8 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 					SoapMessage soapMessage = (SoapMessage) message;
 					soapMessage.setSoapAction(
 							sefazProperties.getDocumentoFiscalEletronico().getConhecimento().getSoapAction());
+					soapMessage.writeTo(
+							new FileOutputStream("C:\\Users\\nicho\\OneDrive\\Documentos\\teste soapmessage\\fix.xml"));
 
 				});
 		String status = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getcStat();
