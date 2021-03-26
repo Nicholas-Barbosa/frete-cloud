@@ -8,6 +8,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
@@ -23,22 +25,24 @@ public final class CertificateKeystore extends SuperEntity {
 	private final String path;
 	private final char[] password;
 	private final String cnpj;
-	private String nsuToFetch;
 
-	public CertificateKeystore(Long id,String path, char[] password, String cnpj, String nsuToFetch) {
+	private final Set<StateToSearchDistFeCte> statesToSearch;
+
+	public CertificateKeystore(Long id, String path, char[] password, String cnpj,
+			Set<StateToSearchDistFeCte> statesToSearch) {
 		super(id);
 		this.path = path;
 		this.password = password;
 		this.cnpj = cnpj;
-		this.nsuToFetch = nsuToFetch;
+		this.statesToSearch = new HashSet<>(statesToSearch);
 	}
 
 	public String getCnpj() {
 		return cnpj;
 	}
 
-	public String getNsuToFetch() {
-		return nsuToFetch;
+	public Set<StateToSearchDistFeCte> getStatesToSearch() {
+		return new HashSet<>(statesToSearch);
 	}
 
 	@Override

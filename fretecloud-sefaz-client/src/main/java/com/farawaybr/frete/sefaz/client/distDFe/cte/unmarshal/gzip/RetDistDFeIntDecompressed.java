@@ -6,5 +6,5 @@ public class RetDistDFeIntDecompressed {
 
 	private CertificateKeystore certificateKeystore;
 	
-	
+	 
 }
