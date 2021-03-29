@@ -8,6 +8,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +20,11 @@ import org.springframework.ws.transport.http.HttpComponentsMessageSender;
 
 import com.farawaybr.frete.domain.CertificateKeystore;
 import com.farawaybr.frete.domain.State;
+import com.farawaybr.frete.sefaz.base64.Base64Service;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.TipoAmbient;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.UnCteDistResponse;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.UnRetDistDFeInt;
+import com.farawaybr.frete.sefaz.gzip.GzipService;
 import com.farawaybr.frete.sefaz.httpclient.CloseableHttpClientSslFactory;
 import com.farawaybr.frete.sefaz.keystore.KeyTrustStoreLoader;
 import com.farawaybr.frete.sefaz.properties.SefazProperties;
@@ -40,13 +45,19 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 
 	private CertificateKeystore certificateKeystore;
 
+	private final GzipService gZipService;
+
+	private final Base64Service base64Service;
+
 	public DistDFeConhecimentoWSClient(SefazProperties sefazProperties, KeyTrustStoreLoader keyTrustLoader,
-			DistDFeCteRequestObjectsFactory distDfeCteFactory) {
+			DistDFeCteRequestObjectsFactory distDfeCteFactory, GzipService gzipService, Base64Service base64Service) {
 		super();
 		this.sefazProperties = sefazProperties;
 		this.keyTrustLoader = keyTrustLoader;
 		this.distDfeCteFactory = distDfeCteFactory;
 		this.httpClientFactory = CloseableHttpClientSslFactory.create();
+		this.gZipService = gzipService;
+		this.base64Service = base64Service;
 	}
 
 	/**
@@ -91,6 +102,8 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 
 			String status = null;
 			String ultNSU = stateToSearch.getLastNSU();
+			final List<UnRetDistDFeInt> retsDists = new ArrayList<>();
+
 			do {
 				log.info("Sending request to " + getDefaultUri() + " with NSU # " + ultNSU + " for state of "
 						+ state.getNome());
@@ -108,11 +121,13 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 				String xMotivo = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getxMotivo();
 				ultNSU = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getUltNSU();
 
+				retsDists.add(response.getUnCteDistInteresseResult().getUnRetDistDFeInt());
 				log.info("Got reponse from " + getDefaultUri() + ", for state of: " + state.getNome() + " with status: "
 						+ status + " xMotivo: " + xMotivo);
 
 			} while (status.equals("138"));
 			log.info("All ctes were obtained for the certificate " + certificateKeystore.getCnpj());
+
 		});
 	}
 
@@ -138,11 +153,12 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 		webServiceTemplate.setMessageSender(httpComponentsMessageSender);
 
 	}
-//	private boolean checkStatusAndChangeUltNsu(String status, String nsu) {
-//		boolean statusOk = status.equals("138") || status.equals("137");
-//		this.ultNSU = statusOk ? nsu : ultNSU;
-//
-//		return statusOk;
-//	}
+
+	@Override
+	public void decompress(List<UnRetDistDFeInt> retDistDFeInt) {
+		
+		
+	}
+
 
 }

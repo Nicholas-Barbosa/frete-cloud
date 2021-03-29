@@ -16,4 +16,7 @@ public interface Base64Service {
 	default String decode(String text) {
 		return new String(decoder.decode(text));
 	}
+	default byte[] decode(byte[] text) {
+		return decoder.decode(text);
+	}
 }

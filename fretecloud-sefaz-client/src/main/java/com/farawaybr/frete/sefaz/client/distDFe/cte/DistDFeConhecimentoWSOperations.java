@@ -7,8 +7,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.List;
 
 import com.farawaybr.frete.domain.CertificateKeystore;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.UnRetDistDFeInt;
 
 public interface DistDFeConhecimentoWSOperations {
 
@@ -18,4 +20,5 @@ public interface DistDFeConhecimentoWSOperations {
 
 	public void sendAndReceive();
 
+	void decompress(List<UnRetDistDFeInt> retDistDFeInt);
 }

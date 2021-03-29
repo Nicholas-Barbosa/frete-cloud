@@ -1,4 +1,4 @@
-package com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.gzip;
+package com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed;
 
 import java.util.ArrayList;
 import java.util.List;
