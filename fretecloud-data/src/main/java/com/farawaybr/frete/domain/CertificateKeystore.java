@@ -27,7 +27,7 @@ public final class CertificateKeystore extends SuperEntity {
 	private final char[] password;
 	private final String cnpj;
 
-	@OneToMany(mappedBy = "certificateKeystore")
+	@OneToMany
 	private final Set<StateToSearchDistFeCte> statesToSearch;
 
 	public CertificateKeystore(Long id, String path, char[] password, String cnpj,

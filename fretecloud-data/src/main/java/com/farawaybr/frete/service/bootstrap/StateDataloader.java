@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.farawaybr.frete.domain.State;
-import com.farawaybr.frete.repository.StateRepository;
+import com.farawaybr.frete.service.crud.certificate.StateCrudService;
 
 @Component
 @Profile("load-states")
@@ -20,16 +20,16 @@ public class StateDataloader implements CommandLineRunner {
 
 	private final Logger log = org.slf4j.LoggerFactory.getLogger(StateDataloader.class);
 
-	private final StateRepository stateRepository;
+	private final StateCrudService stateCrudService;
 
 	private final RestTemplate restTemplate;
 
 	private final IBGEConfigProperties ibgeConfigProperties;
 
-	public StateDataloader(StateRepository stateRepository, RestTemplate restTemplate,
+	public StateDataloader(StateCrudService stateCrudService, RestTemplate restTemplate,
 			IBGEConfigProperties ibgeConfigProperties) {
 		super();
-		this.stateRepository = stateRepository;
+		this.stateCrudService = stateCrudService;
 		this.restTemplate = restTemplate;
 		this.ibgeConfigProperties = ibgeConfigProperties;
 	}
@@ -37,7 +37,7 @@ public class StateDataloader implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		List<StateIbgeResponse> stateResponses = getStates();
-		stateRepository.saveAll(stateResponses.parallelStream().map(this::convertToState)
+		stateCrudService.saveAll(stateResponses.parallelStream().map(this::convertToState)
 				.collect(ConcurrentSkipListSet::new, Set::add, Set::addAll));
 	}
 
@@ -48,6 +48,6 @@ public class StateDataloader implements CommandLineRunner {
 	}
 
 	private State convertToState(StateIbgeResponse stateIbgeResponse) {
-		return new State(null, stateIbgeResponse.getSigla(), stateIbgeResponse.getNome());
+		return new State(null, stateIbgeResponse.getSigla(), stateIbgeResponse.getNome(), stateIbgeResponse.getId());
 	}
 }

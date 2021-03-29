@@ -6,21 +6,17 @@ import javax.persistence.ManyToOne;
 @Entity
 public class StateToSearchDistFeCte extends SuperEntity {
 
-	private String nsuToSearch;
+	private String lastNSU;
 	@ManyToOne
 	private State state;
-
-	@ManyToOne
-	private CertificateKeystore certificateKeystore;
-	
-	public StateToSearchDistFeCte(Long id, String nsuToSearch, State state) {
+	public StateToSearchDistFeCte(Long id, String lastNSU, State state) {
 		super(id);
-		this.nsuToSearch = nsuToSearch;
+		this.lastNSU = lastNSU;
 		this.state = state;
 	}
 
-	public String getNsuToSearch() {
-		return nsuToSearch;
+	public String getLastNSU() {
+		return lastNSU;
 	}
 
 	public State getState() {
@@ -29,14 +25,14 @@ public class StateToSearchDistFeCte extends SuperEntity {
 
 	@Override
 	public String toString() {
-		return "StateToSearchDistFeCte [nsuToSearch=" + nsuToSearch + ", state=" + state + "]";
+		return "StateToSearchDistFeCte [nsuToSearch=" + lastNSU + ", state=" + state + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((nsuToSearch == null) ? 0 : nsuToSearch.hashCode());
+		result = prime * result + ((lastNSU == null) ? 0 : lastNSU.hashCode());
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
 		return result;
 	}
@@ -50,10 +46,10 @@ public class StateToSearchDistFeCte extends SuperEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		StateToSearchDistFeCte other = (StateToSearchDistFeCte) obj;
-		if (nsuToSearch == null) {
-			if (other.nsuToSearch != null)
+		if (lastNSU == null) {
+			if (other.lastNSU != null)
 				return false;
-		} else if (!nsuToSearch.equals(other.nsuToSearch))
+		} else if (!lastNSU.equals(other.lastNSU))
 			return false;
 		if (state == null) {
 			if (other.state != null)

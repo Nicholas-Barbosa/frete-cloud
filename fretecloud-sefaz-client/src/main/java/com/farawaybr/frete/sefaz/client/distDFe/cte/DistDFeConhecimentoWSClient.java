@@ -1,7 +1,6 @@
 
 package com.farawaybr.frete.sefaz.client.distDFe.cte;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -9,8 +8,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +17,7 @@ import org.springframework.ws.soap.SoapMessage;
 import org.springframework.ws.transport.http.HttpComponentsMessageSender;
 
 import com.farawaybr.frete.domain.CertificateKeystore;
+import com.farawaybr.frete.domain.State;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.TipoAmbient;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.UnCteDistResponse;
 import com.farawaybr.frete.sefaz.httpclient.CloseableHttpClientSslFactory;
@@ -42,8 +40,6 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 
 	private CertificateKeystore certificateKeystore;
 
-	private String ultNSU;
-
 	public DistDFeConhecimentoWSClient(SefazProperties sefazProperties, KeyTrustStoreLoader keyTrustLoader,
 			DistDFeCteRequestObjectsFactory distDfeCteFactory) {
 		super();
@@ -54,8 +50,10 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 	}
 
 	/**
-	 * Set certificate containing keystore for mutual authentication with sefaz. And
-	 * set ultNSU field according to nsu of the specified certificate.
+	 * Set certificate containing keystore for mutual authentication with sefaz, and
+	 * create a WebServiceMessageSender object using certificate keystore and cte
+	 * server truststore. The resulting message object will be wrapped in
+	 * WebServiceTemplate setMessageSender().
 	 * 
 	 * @param certificateKeystore
 	 * @throws IOException
@@ -64,42 +62,18 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 	 * @throws KeyStoreException
 	 * @throws NoSuchAlgorithmException
 	 * @throws UnrecoverableKeyException
+	 * @throws KeyManagementException
 	 */
 	@Override
-	public void setDefaultCertificateKeystore(CertificateKeystore certificateKeystore) throws UnrecoverableKeyException,
-			NoSuchAlgorithmException, KeyStoreException, CertificateException, NoSuchProviderException, IOException {
+	public void setDefaultCertificateKeystore(CertificateKeystore certificateKeystore)
+			throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, CertificateException,
+			NoSuchProviderException, IOException, KeyManagementException {
 		log.info("Setting keystore and truststore for mutual authentication...");
 		this.certificateKeystore = certificateKeystore;
 
 		httpClientFactory.setKeyManager(certificateKeystore.new KeystoreLoader().keysManager())
 				.setTrustManager(keyTrustLoader.trustManager());
-
-		this.ultNSU = certificateKeystore.getNsuToFetch();
-	}
-
-	/**
-	 * Call unzipSendAndReceiveFull() until max NSU is reached.When max NSU is
-	 * reached or sendAndRecive() return null, docZip in loteDistDFeInt collection
-	 * will be
-	 * 
-	 * @throws NoSuchAlgorithmException
-	 * @throws KeyManagementException
-	 */
-	@Override
-	public List<UnCteDistResponse> unzipSendAndReceiveFull() throws KeyManagementException, NoSuchAlgorithmException {
-		String status = null;
-		List<UnCteDistResponse> unCteDistResponses = new ArrayList<>();
-		do {
-
-			UnCteDistResponse response = sendAndReceive();
-			status = response == null ? null : response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getcStat();
-			if (response != null) {
-				unCteDistResponses.add(response);
-			}
-			unCteDistResponses.add(response);
-		} while (status != null);
-		log.info("Finished! All ctes were obtained!");
-		return unCteDistResponses;
+		createWebServiceMessageSender();
 	}
 
 	/**
@@ -109,60 +83,66 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 	 * @throws KeyManagementException
 	 */
 	@Override
-	public UnCteDistResponse sendAndReceive() throws KeyManagementException, NoSuchAlgorithmException {
-		log.info("Sending request to " + getDefaultUri() + " with NSU # " + ultNSU);
+	public void sendAndReceive() {
+		certificateKeystore.getStatesToSearch().parallelStream().forEach(stateToSearch -> {
+			State state = stateToSearch.getState();
 
-		DistDFeInt distDFeInt = distDfeCteFactory.getRequestObjectInstance();
-		setDistDFeIntAttributes(distDFeInt, certificateKeystore);
+			DistDFeInt distDFeInt = distDfeCteFactory.getRequestObjectInstance();
+
+			String status = null;
+			String ultNSU = stateToSearch.getLastNSU();
+			do {
+				log.info("Sending request to " + getDefaultUri() + " with NSU # " + ultNSU + " for state of "
+						+ state.getNome());
+
+				setDistDFeIntAttributes(distDFeInt, certificateKeystore, state.getIbgeId(), ultNSU);
+
+				UnCteDistResponse response = (UnCteDistResponse) getWebServiceTemplate()
+
+						.marshalSendAndReceive(distDfeCteFactory.getAllRequestObject(), message -> {
+							SoapMessage soapMessage = (SoapMessage) message;
+							soapMessage.setSoapAction(
+									sefazProperties.getDocumentoFiscalEletronico().getConhecimento().getSoapAction());
+						});
+				status = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getcStat();
+				String xMotivo = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getxMotivo();
+				ultNSU = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getUltNSU();
+
+				log.info("Got reponse from " + getDefaultUri() + ", for state of: " + state.getNome() + " with status: "
+						+ status + " xMotivo: " + xMotivo);
+
+			} while (status.equals("138"));
+			log.info("All ctes were obtained for the certificate " + certificateKeystore.getCnpj());
+		});
+	}
+
+	private void setDistDFeIntAttributes(DistDFeInt distDFeInt, CertificateKeystore certificateKeystore,
+			Integer cUFAutor, String ultNSU) {
+		log.debug("Setting attributes to request object...");
+		distDFeInt.setVersao("1.00");
+		distDFeInt.setTpAmb(TipoAmbient.PRODUCAO.getAmbient());
+		distDFeInt.setCUFAutor(cUFAutor.toString());
+		distDFeInt.setCNPJ(certificateKeystore.getCnpj());
+		distDfeCteFactory.setUltNsu(ultNSU);
+	}
+
+	private void createWebServiceMessageSender() throws KeyManagementException, NoSuchAlgorithmException {
+		log.info(
+				"Creating WebServiceMessageSender object and setting http client using keystore and truststore from certificate...");
 
 		WebServiceTemplate webServiceTemplate = getWebServiceTemplate();
-
 		HttpComponentsMessageSender httpComponentsMessageSender = new HttpComponentsMessageSender();
 
 		httpComponentsMessageSender.setHttpClient(httpClientFactory.getCloseableHttpClient());
 
 		webServiceTemplate.setMessageSender(httpComponentsMessageSender);
-		UnCteDistResponse response = (UnCteDistResponse) getWebServiceTemplate()
 
-				.marshalSendAndReceive(distDfeCteFactory.getAllRequestObject(), message -> {
-					SoapMessage soapMessage = (SoapMessage) message;
-					soapMessage.setSoapAction(
-							sefazProperties.getDocumentoFiscalEletronico().getConhecimento().getSoapAction());
-					soapMessage.writeTo(
-							new FileOutputStream("C:\\Users\\nicho\\OneDrive\\Documentos\\teste soapmessage\\fix.xml"));
-
-				});
-		String status = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getcStat();
-		String xMotivo = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getxMotivo();
-		String ultNSU = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getUltNSU();
-
-		log.info("Got reponse from " + getDefaultUri() + ", status: " + status + " xMotivo: " + xMotivo);
-
-		return checkStatusAndChangeUltNsu(status, ultNSU) ? response : null;
 	}
-
-	private void setDistDFeIntAttributes(DistDFeInt distDFeInt, CertificateKeystore certificateKeystore) {
-		log.debug("Setting attributes to request object...");
-		distDFeInt.setVersao("1.00");
-		distDFeInt.setTpAmb(TipoAmbient.PRODUCAO.getAmbient());
-		distDFeInt.setCUFAutor("41");
-		distDFeInt.setCNPJ(certificateKeystore.getCnpj());
-		distDfeCteFactory.setUltNsu(this.ultNSU);
-	}
-
-	private boolean checkStatusAndChangeUltNsu(String status, String nsu) {
-		boolean statusOk = status.equals("138") || status.equals("137");
-		this.ultNSU = statusOk ? nsu : ultNSU;
-
-		return statusOk;
-	}
-
-	public void setUltNSU(String ultNSU) {
-		this.ultNSU = ultNSU;
-	}
-
-	public String getUltNSU() {
-		return ultNSU;
-	}
+//	private boolean checkStatusAndChangeUltNsu(String status, String nsu) {
+//		boolean statusOk = status.equals("138") || status.equals("137");
+//		this.ultNSU = statusOk ? nsu : ultNSU;
+//
+//		return statusOk;
+//	}
 
 }
