@@ -10,6 +10,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +21,11 @@ import org.springframework.ws.transport.http.HttpComponentsMessageSender;
 
 import com.farawaybr.frete.domain.CertificateKeystore;
 import com.farawaybr.frete.domain.State;
-import com.farawaybr.frete.sefaz.base64.Base64Service;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.deserilize.DistDFeConhecimentoWSDeserializer;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.TipoAmbient;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.UnCteDistResponse;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.UnRetDistDFeInt;
-import com.farawaybr.frete.sefaz.gzip.GzipService;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed.RetDistDFeIntDecompressed;
 import com.farawaybr.frete.sefaz.httpclient.CloseableHttpClientSslFactory;
 import com.farawaybr.frete.sefaz.keystore.KeyTrustStoreLoader;
 import com.farawaybr.frete.sefaz.properties.SefazProperties;
@@ -45,19 +46,17 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 
 	private CertificateKeystore certificateKeystore;
 
-	private final GzipService gZipService;
-
-	private final Base64Service base64Service;
+	private final DistDFeConhecimentoWSDeserializer distDFeConhecimentoDeserializer;
 
 	public DistDFeConhecimentoWSClient(SefazProperties sefazProperties, KeyTrustStoreLoader keyTrustLoader,
-			DistDFeCteRequestObjectsFactory distDfeCteFactory, GzipService gzipService, Base64Service base64Service) {
+			DistDFeCteRequestObjectsFactory distDfeCteFactory,
+			DistDFeConhecimentoWSDeserializer distDFeConhecimentoDeserializer) {
 		super();
 		this.sefazProperties = sefazProperties;
 		this.keyTrustLoader = keyTrustLoader;
 		this.distDfeCteFactory = distDfeCteFactory;
 		this.httpClientFactory = CloseableHttpClientSslFactory.create();
-		this.gZipService = gzipService;
-		this.base64Service = base64Service;
+		this.distDFeConhecimentoDeserializer = distDFeConhecimentoDeserializer;
 	}
 
 	/**
@@ -65,6 +64,9 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 	 * create a WebServiceMessageSender object using certificate keystore and cte
 	 * server truststore. The resulting message object will be wrapped in
 	 * WebServiceTemplate setMessageSender().
+	 * 
+	 * The provided certificate will be set to DistDFeConhecimentoDeserializer to
+	 * create a RetDistDFeIntDecompressed object.
 	 * 
 	 * @param certificateKeystore
 	 * @throws IOException
@@ -85,6 +87,8 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 		httpClientFactory.setKeyManager(certificateKeystore.new KeystoreLoader().keysManager())
 				.setTrustManager(keyTrustLoader.trustManager());
 		createWebServiceMessageSender();
+
+		distDFeConhecimentoDeserializer.setDefaultCertificate(certificateKeystore);
 	}
 
 	/**
@@ -94,7 +98,8 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 	 * @throws KeyManagementException
 	 */
 	@Override
-	public void sendAndReceive() {
+	public List<RetDistDFeIntDecompressed> sendAndReceive() {
+		List<RetDistDFeIntDecompressed> retsDecompressed = new CopyOnWriteArrayList<>();
 		certificateKeystore.getStatesToSearch().parallelStream().forEach(stateToSearch -> {
 			State state = stateToSearch.getState();
 
@@ -124,11 +129,13 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 				retsDists.add(response.getUnCteDistInteresseResult().getUnRetDistDFeInt());
 				log.info("Got reponse from " + getDefaultUri() + ", for state of: " + state.getNome() + " with status: "
 						+ status + " xMotivo: " + xMotivo);
-
+				status = "137";
 			} while (status.equals("138"));
 			log.info("All ctes were obtained for the certificate " + certificateKeystore.getCnpj());
-
+			distDFeConhecimentoDeserializer.deserialize(retsDists.get(0), state.getIbgeId());
 		});
+
+		return retsDecompressed;
 	}
 
 	private void setDistDFeIntAttributes(DistDFeInt distDFeInt, CertificateKeystore certificateKeystore,
@@ -153,12 +160,5 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 		webServiceTemplate.setMessageSender(httpComponentsMessageSender);
 
 	}
-
-	@Override
-	public void decompress(List<UnRetDistDFeInt> retDistDFeInt) {
-		
-		
-	}
-
 
 }

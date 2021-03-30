@@ -4,8 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
-import com.farawaybr.frete.sefaz.base64.Base64Service;
-import com.farawaybr.frete.sefaz.gzip.GzipService;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.deserilize.DistDFeConhecimentoWSDeserializer;
 import com.farawaybr.frete.sefaz.keystore.KeyTrustStoreLoader;
 import com.farawaybr.frete.sefaz.properties.SefazProperties;
 
@@ -15,18 +14,16 @@ public class DistDFeConhecimentoWSClientConfig {
 	private final SefazProperties sefazProperties;
 	private final KeyTrustStoreLoader keytrustloader;
 	private final DistDFeCteRequestObjectsFactory distDFeCteRequestObjectsFactory;
-	private final GzipService gzipService;
-	private final Base64Service base64Service;
+	private final DistDFeConhecimentoWSDeserializer distDFeConhecimentoDeserializer;
 
 	public DistDFeConhecimentoWSClientConfig(SefazProperties sefazProperties, KeyTrustStoreLoader keytrustloader,
-			DistDFeCteRequestObjectsFactory distDFeCteRequestObjectsFactory, GzipService gzipService,
-			Base64Service base64Service) {
+			DistDFeCteRequestObjectsFactory distDFeCteRequestObjectsFactory,
+			DistDFeConhecimentoWSDeserializer distDFeConhecimentoDeserializer) {
 		super();
 		this.sefazProperties = sefazProperties;
 		this.keytrustloader = keytrustloader;
 		this.distDFeCteRequestObjectsFactory = distDFeCteRequestObjectsFactory;
-		this.gzipService = gzipService;
-		this.base64Service = base64Service;
+		this.distDFeConhecimentoDeserializer = distDFeConhecimentoDeserializer;
 	}
 
 	@Bean
@@ -49,7 +46,7 @@ public class DistDFeConhecimentoWSClientConfig {
 	@Bean
 	public DistDFeConhecimentoWSClient countryClient(Jaxb2Marshaller marshaller) {
 		DistDFeConhecimentoWSClient client = new DistDFeConhecimentoWSClient(sefazProperties, keytrustloader,
-				distDFeCteRequestObjectsFactory, gzipService, base64Service);
+				distDFeCteRequestObjectsFactory, distDFeConhecimentoDeserializer);
 		client.setDefaultUri("https://www1.cte.fazenda.gov.br/CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx");
 		client.setMarshaller(marshaller());
 		client.setUnmarshaller(unmarshaller());

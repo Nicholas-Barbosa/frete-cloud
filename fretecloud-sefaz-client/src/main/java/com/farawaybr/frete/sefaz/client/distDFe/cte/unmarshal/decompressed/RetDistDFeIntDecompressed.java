@@ -8,14 +8,14 @@ public class RetDistDFeIntDecompressed {
 
 	private CertificateKeystore certificateKeystore;
 
-	private Integer ufAutor;
+	private Integer ibgeStateId;
 
 	public RetDistDFeIntDecompressed(LoteDistDFeIntDecompressed loteDistDFeIntDecompressedl,
-			CertificateKeystore certificateKeystore, Integer ufAutor) {
+			CertificateKeystore certificateKeystore, Integer ibgeStateId) {
 		super();
 		this.loteDistDFeIntDecompressedl = loteDistDFeIntDecompressedl;
 		this.certificateKeystore = certificateKeystore;
-		this.ufAutor = ufAutor;
+		this.ibgeStateId = ibgeStateId;
 	}
 
 	public LoteDistDFeIntDecompressed getLoteDistDFeIntDecompressedl() {
@@ -26,7 +26,7 @@ public class RetDistDFeIntDecompressed {
 		return certificateKeystore;
 	}
 
-	public Integer getUfAutor() {
-		return ufAutor;
+	public Integer getIbgeStateId() {
+		return ibgeStateId;
 	}
 }

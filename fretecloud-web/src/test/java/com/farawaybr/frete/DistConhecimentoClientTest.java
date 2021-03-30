@@ -23,7 +23,7 @@ class DistConhecimentoClientTest {
 		try {
 			Set<StateToSearchDistFeCte> statesToSearch = new HashSet<>();
 			statesToSearch
-					.add(new StateToSearchDistFeCte(null, "000000000000000", new State(null, "DF", "DF", 41)));
+					.add(new StateToSearchDistFeCte(null, "000000000000000", new State(null, "PR", "Parana", 41)));
 			distCte.setDefaultCertificateKeystore(new CertificateKeystore(null,
 					"C:\\Users\\nicho\\Downloads\\CDG COMPONENTES AUTOMOTIVOS LTDA09512164000172.pfx",
 					new char[] { 'M', '@', 's', 't', 'e', 'r', '!', '@', '#' }, "09512164000172", statesToSearch));
