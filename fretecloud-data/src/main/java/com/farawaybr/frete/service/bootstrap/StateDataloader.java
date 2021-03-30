@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.farawaybr.frete.domain.State;
-import com.farawaybr.frete.service.crud.certificate.StateCrudService;
+import com.farawaybr.frete.service.crud.StateCrudService;
 
 @Component
 @Profile("load-states")

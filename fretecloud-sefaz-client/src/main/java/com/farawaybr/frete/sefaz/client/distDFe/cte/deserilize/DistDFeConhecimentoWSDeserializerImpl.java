@@ -38,7 +38,6 @@ public class DistDFeConhecimentoWSDeserializerImpl implements DistDFeConheciment
 	public RetDistDFeIntDecompressed deserialize(UnRetDistDFeInt ret, Integer ibgeStateId) {
 		List<DocZipDecompressed> docs = ret.getLoteDistDFeInt().getDocsZip().parallelStream().map(doc -> {
 			String rawContent = gzipService.decompress(doc.getValue());
-			System.out.println("Raw: " + rawContent);
 			try {
 				CteProc cteProc = null;
 				ProcEventoCTe procEvento = null;

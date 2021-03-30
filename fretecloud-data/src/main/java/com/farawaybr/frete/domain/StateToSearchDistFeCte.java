@@ -9,6 +9,11 @@ public class StateToSearchDistFeCte extends SuperEntity {
 	private String lastNSU;
 	@ManyToOne
 	private State state;
+
+	public StateToSearchDistFeCte() {
+		super(null);
+	}
+
 	public StateToSearchDistFeCte(Long id, String lastNSU, State state) {
 		super(id);
 		this.lastNSU = lastNSU;

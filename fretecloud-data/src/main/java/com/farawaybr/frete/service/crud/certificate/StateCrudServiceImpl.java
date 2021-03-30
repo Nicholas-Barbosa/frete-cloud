@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.farawaybr.frete.domain.State;
 import com.farawaybr.frete.repository.StateRepository;
+import com.farawaybr.frete.service.crud.StateCrudService;
 
 @Service
 public class StateCrudServiceImpl implements StateCrudService {
@@ -28,7 +29,7 @@ public class StateCrudServiceImpl implements StateCrudService {
 
 	@Override
 	public boolean checkIfExists(Integer key) {
-		return mapStates.containsKey(key);
+		return mapStates.isEmpty() ? true : mapStates.containsKey(key);
 	}
 
 	@Override
@@ -37,7 +38,7 @@ public class StateCrudServiceImpl implements StateCrudService {
 		Set<State> states = new HashSet<>();
 		iterable.forEach(state -> states.add(state));
 
-		return states.parallelStream().filter(state -> checkIfExists(state.getIbgeId())).map(state -> repo.save(state))
+		return states.parallelStream().filter(state -> !checkIfExists(state.getIbgeId())).map(state -> repo.save(state))
 				.collect(Collectors.toList());
 	}
 
