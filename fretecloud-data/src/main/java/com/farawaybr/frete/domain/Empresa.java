@@ -3,7 +3,7 @@ package com.farawaybr.frete.domain;
 import javax.persistence.Table;
 
 @Table
-public class Company extends SuperEntity {
+public class Empresa extends SuperEntity {
 
 	private final String cnpj;
 	private final String IE;
@@ -11,11 +11,11 @@ public class Company extends SuperEntity {
 	private final String fantasyName;
 	private final Address address;
 
-	public Company() {
+	public Empresa() {
 		this(null, null, null, null, null, null);
 	}
 
-	public Company(Long id, String cnpj, String iE, String name, String fantasyName, Address address) {
+	public Empresa(Long id, String cnpj, String iE, String name, String fantasyName, Address address) {
 		super(id);
 		this.cnpj = cnpj;
 		this.IE = iE;
