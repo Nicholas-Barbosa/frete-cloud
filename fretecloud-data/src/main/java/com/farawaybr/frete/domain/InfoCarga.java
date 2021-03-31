@@ -1,10 +1,13 @@
 package com.farawaybr.frete.domain;
 
-import javax.persistence.Table;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
-@Table
+@Entity
 public class InfoCarga extends SuperEntity {
 
+	@Enumerated(EnumType.STRING)
 	private final UnidadeDeMedida unidade;
 	private final String medida;
 	private final Float quantidade;
@@ -28,5 +31,4 @@ public class InfoCarga extends SuperEntity {
 		return quantidade;
 	}
 
-	
 }

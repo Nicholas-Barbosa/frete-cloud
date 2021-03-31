@@ -1,22 +1,39 @@
 package com.farawaybr.frete.domain;
 
+import java.math.BigDecimal;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
+
+@Entity
 public class Imposto extends SuperEntity {
 
+	@OneToOne(cascade = CascadeType.ALL)
 	private final Icms00 icms00;
+	@OneToOne(cascade = CascadeType.ALL)
 	private final Icms20 icms20;
+	@OneToOne(cascade = CascadeType.ALL)
 	private final Icms45 icms45;
+	@OneToOne(cascade = CascadeType.ALL)
 	private final Icms60 icms60;
+	@OneToOne(cascade = CascadeType.ALL)
 	private final Icms90 icms90;
+	@OneToOne(cascade = CascadeType.ALL)
 	private final IcmsOutraUf icmsOutraUf;
+	@OneToOne(cascade = CascadeType.ALL)
 	private final IcmsSn icmsSn;
+	@OneToOne(cascade = CascadeType.ALL)
 	private final IcmsUfFim icmsUfFim;
+	
+	private final BigDecimal tributos;
 
 	public Imposto() {
-		this(null, null, null, null, null, null, null, null, null);
+		this(null, null, null, null, null, null, null, null, null, null);
 	}
 
 	public Imposto(Long id, Icms00 icms00, Icms20 icms20, Icms45 icms45, Icms60 icms60, Icms90 icms90,
-			IcmsOutraUf icmsOutraUf, IcmsSn icmsSn, IcmsUfFim icmsUfFim) {
+			IcmsOutraUf icmsOutraUf, IcmsSn icmsSn, IcmsUfFim icmsUfFim, BigDecimal tributos) {
 		super(id);
 		this.icms00 = icms00;
 		this.icms20 = icms20;
@@ -26,6 +43,7 @@ public class Imposto extends SuperEntity {
 		this.icmsOutraUf = icmsOutraUf;
 		this.icmsSn = icmsSn;
 		this.icmsUfFim = icmsUfFim;
+		this.tributos = tributos;
 	}
 
 	public Icms00 getIcms00() {
@@ -60,4 +78,7 @@ public class Imposto extends SuperEntity {
 		return icmsUfFim;
 	}
 
+	public BigDecimal getTributos() {
+		return tributos;
+	}
 }

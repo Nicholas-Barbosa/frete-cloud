@@ -4,14 +4,17 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Table;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
-@Table
+@Entity
 public class Carga extends SuperEntity {
 
 	private final BigDecimal valor;
 	private final String produtoPredominante;
 	private final String caracteristicas;
+	@OneToMany(cascade = CascadeType.ALL)
 	private final List<InfoCarga> infosCargs;
 
 	public Carga(Long id, BigDecimal valor, String produtoPredominante, String caracteristicas,

@@ -1,37 +1,57 @@
 package com.farawaybr.frete.domain;
 
 import java.time.LocalDate;
+import java.util.Set;
 
-import javax.persistence.Table;
+import javax.persistence.CascadeType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToOne;
 
-@Table
+@MappedSuperclass
 public class Conhecimento extends DocumentoEletronico {
 
 	private final String chave;
 	private final String naturezaOperacao;
-	private final String mod;
+	@Enumerated(EnumType.STRING)
 	private final Modal modal;
+	@ManyToOne
 	private final City origem;
+	@ManyToOne
 	private final City destino;
+	@ManyToOne
 	private final Empresa emitente;
+	@ManyToOne
 	private final Empresa remetente;
+	@ManyToOne
 	private final Empresa expedidor;
+	@ManyToOne
 	private final Empresa destinatario;
-	private final ValoresPrestacaoServico vPrest;
+	@OneToOne(cascade = CascadeType.ALL)
+	private final PrestacaoServico prestacaoServico;
+	@OneToOne(cascade = CascadeType.ALL)
 	private final Imposto imposto;
-	private final TipoService tipoServico;
-	private final NotaFiscal notaFiscal;
+	@Enumerated(EnumType.STRING)
+	private final TipoCte tipoServico;
+	@ManyToMany
+	@JoinTable(joinColumns = @JoinColumn(name = "conhecimento_id"), inverseJoinColumns = @JoinColumn(name = "nota_id"))
+	private final Set<NotaFiscal> notasFiscais;
+	@OneToOne(cascade = CascadeType.ALL)
 	private final Carga carga;
-	private final DocumentoDeTransporte docDeTransporte;
-
+	@Enumerated(EnumType.STRING)
+	private final TipoCte tipo;
 	public Conhecimento(Long id, String numero, String serie, LocalDate emissao, String chave, String naturezaOperacao,
-			String mod, Modal modal, City origem, City destino, Empresa emitente, Empresa remetente, Empresa expedidor,
-			Empresa destinatario, ValoresPrestacaoServico vPrest, Imposto imposto, TipoService tipoServico,
-			NotaFiscal notaFiscal, Carga carga, DocumentoDeTransporte docDeTransporte) {
+			Modal modal, City origem, City destino, Empresa emitente, Empresa remetente, Empresa expedidor,
+			Empresa destinatario, PrestacaoServico vPrest, Imposto imposto, TipoCte tipoServico,
+			Set<NotaFiscal> notaFiscal, Carga carga, TipoCte tipo) {
 		super(id, numero, serie, emissao);
 		this.chave = chave;
 		this.naturezaOperacao = naturezaOperacao;
-		this.mod = mod;
 		this.modal = modal;
 		this.origem = origem;
 		this.destino = destino;
@@ -39,12 +59,12 @@ public class Conhecimento extends DocumentoEletronico {
 		this.remetente = remetente;
 		this.expedidor = expedidor;
 		this.destinatario = destinatario;
-		this.vPrest = vPrest;
+		this.prestacaoServico = vPrest;
 		this.imposto = imposto;
 		this.tipoServico = tipoServico;
-		this.notaFiscal = notaFiscal;
+		this.notasFiscais = notaFiscal;
 		this.carga = carga;
-		this.docDeTransporte = docDeTransporte;
+		this.tipo = tipo;
 	}
 
 	public String getChave() {
@@ -53,10 +73,6 @@ public class Conhecimento extends DocumentoEletronico {
 
 	public String getNaturezaOperacao() {
 		return naturezaOperacao;
-	}
-
-	public String getMod() {
-		return mod;
 	}
 
 	public Modal getModal() {
@@ -87,28 +103,27 @@ public class Conhecimento extends DocumentoEletronico {
 		return destinatario;
 	}
 
-	public ValoresPrestacaoServico getvPrest() {
-		return vPrest;
+	public PrestacaoServico getvPrest() {
+		return prestacaoServico;
 	}
 
 	public Imposto getImposto() {
 		return imposto;
 	}
 
-	public TipoService getTipoServico() {
+	public TipoCte getTipoServico() {
 		return tipoServico;
 	}
 
-	public NotaFiscal getNotaFiscal() {
-		return notaFiscal;
+	public Set<NotaFiscal> getNotasFiscais() {
+		return notasFiscais;
 	}
 
 	public Carga getCarga() {
 		return carga;
 	}
 
-	public DocumentoDeTransporte getDocDeTransporte() {
-		return docDeTransporte;
+	public TipoCte getTipo() {
+		return tipo;
 	}
-
 }

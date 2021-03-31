@@ -1,35 +1,36 @@
 package com.farawaybr.frete.domain;
 
-import javax.persistence.Table;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
-@Table
+@Entity
 public class City extends SuperEntity {
 
 	private final String name;
-	private final State state;
 	private final String ibgeCode;
+	@ManyToOne()
+	private final State estado;
 
 	public City() {
-		this(null, null, null,null);
+		this(null, null, null, null);
 	}
 
-	public City(Long id, String name, State state, String ibgeCode) {
+	public City(Long id, String name, String ibgeCode, State estado) {
 		super(id);
 		this.name = name;
-		this.state = state;
 		this.ibgeCode = ibgeCode;
+		this.estado = estado;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public State getState() {
-		return state;
-	}
-
 	public String getIbgeCode() {
 		return ibgeCode;
 	}
 
+	public State getEstado() {
+		return estado;
+	}
 }

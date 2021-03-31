@@ -2,6 +2,9 @@ package com.farawaybr.frete.domain;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Entity;
+
+@Entity
 public class IcmsUfFim extends SuperEntity {
 
 	private BigDecimal baseCalculoUfFim;

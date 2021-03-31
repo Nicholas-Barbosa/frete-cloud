@@ -1,8 +1,8 @@
 package com.farawaybr.frete.domain;
 
-import javax.persistence.Table;
+import javax.persistence.Entity;
 
-@Table
+@Entity
 public class NotaFiscal extends SuperEntity {
 
 	private final String numero;

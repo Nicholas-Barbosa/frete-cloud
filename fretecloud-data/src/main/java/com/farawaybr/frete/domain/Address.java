@@ -1,8 +1,9 @@
 package com.farawaybr.frete.domain;
 
-import javax.persistence.Table;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
-@Table
+@Entity
 public class Address extends SuperEntity {
 
 	private final String street;
@@ -10,6 +11,7 @@ public class Address extends SuperEntity {
 	private final String district;
 	private final String cep;
 	private final String fone;
+	@ManyToOne
 	private final City city;
 
 	public Address() {

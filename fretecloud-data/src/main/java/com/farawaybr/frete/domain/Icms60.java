@@ -2,6 +2,8 @@ package com.farawaybr.frete.domain;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Entity;
+@Entity
 public class Icms60 extends Icms {
 
 	private BigDecimal credito;

@@ -1,14 +1,17 @@
 package com.farawaybr.frete.domain;
 
-import javax.persistence.Table;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
-@Table
+@Entity
 public class Empresa extends SuperEntity {
 
 	private final String cnpj;
 	private final String IE;
 	private final String name;
 	private final String fantasyName;
+	@OneToOne(cascade = CascadeType.ALL)
 	private final Address address;
 
 	public Empresa() {
