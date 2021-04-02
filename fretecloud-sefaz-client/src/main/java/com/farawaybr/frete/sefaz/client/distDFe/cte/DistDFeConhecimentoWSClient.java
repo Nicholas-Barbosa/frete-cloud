@@ -138,14 +138,16 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 				String xMotivo = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getxMotivo();
 				ultNSU = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getUltNSU();
 
+				log.info("Got reponse from " + getDefaultUri() + ", for state of: " + state.getNome() + " with status: "
+						+ status + " xMotivo: " + xMotivo);
+
 				if (status.equals("138")) {
 					docsDecompresseds.addAll(distDFeConhecimentoDeserializer
 							.deserialize(response.getUnCteDistInteresseResult().getUnRetDistDFeInt()));
-				}
+				} else
+					break;
 
-				log.info("Got reponse from " + getDefaultUri() + ", for state of: " + state.getNome() + " with status: "
-						+ status + " xMotivo: " + xMotivo);
-				status = "137";
+				 status = "137";
 			} while (status.equals("138"));
 			estadosDistDFeResponses
 					.add(new DistDFeCteResponseByEstado(stateToSearch.getState().getIbgeId(), docsDecompresseds));
