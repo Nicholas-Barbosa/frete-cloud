@@ -1,6 +1,7 @@
 
 package com.farawaybr.frete.sefaz.client.distDFe.cte;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -11,6 +12,7 @@ import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,7 @@ import org.springframework.ws.transport.http.HttpComponentsMessageSender;
 import com.farawaybr.frete.domain.CertificateKeystore;
 import com.farawaybr.frete.domain.State;
 import com.farawaybr.frete.domain.StateToSearchDistFeCte;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.DistDFeCteRequestObjectsFactory.DistDFeIntAttributesFactory;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.deserilize.DistDFeConhecimentoWSDeserializer;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.response.DistDFeCteDocDecompressed;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.response.DistDFeCteResponse;
@@ -31,8 +34,6 @@ import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.UnCteDistResponse;
 import com.farawaybr.frete.sefaz.httpclient.CloseableHttpClientSslFactory;
 import com.farawaybr.frete.sefaz.keystore.KeyTrustStoreLoader;
 import com.farawaybr.frete.sefaz.properties.SefazProperties;
-
-import br.inf.portalfiscal.cte.DistDFeInt;
 
 public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implements DistDFeConhecimentoWSOperations {
 
@@ -97,6 +98,7 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 	 * 
 	 * @throws NoSuchAlgorithmException
 	 * @throws KeyManagementException
+	 * @return DistDFeCteResponse
 	 */
 	@Override
 	public DistDFeCteResponse sendAndReceive() {
@@ -105,10 +107,12 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 		List<DistDFeCteDocDecompressed> docsDecompresseds = new CopyOnWriteArrayList<>();
 
 		Set<StateToSearchDistFeCte> statesToSearch = certificateKeystore.getStatesToSearch();
+
+		distDfeCteFactory.registerKeys(statesToSearch.parallelStream().map(s -> s.getState().getIbgeId())
+				.collect(CopyOnWriteArraySet::new, Set::add, Set::addAll));
+
 		statesToSearch.parallelStream().forEach(stateToSearch -> {
 			State state = stateToSearch.getState();
-
-			DistDFeInt distDFeInt = distDfeCteFactory.getRequestObjectInstance();
 
 			String status = null;
 			String ultNSU = stateToSearch.getLastNSU();
@@ -117,20 +121,27 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 				log.info("Sending request to " + getDefaultUri() + " with NSU # " + ultNSU + " for state of "
 						+ state.getNome());
 
-				setDistDFeIntAttributes(distDFeInt, certificateKeystore, state.getIbgeId(), ultNSU);
+				distDfeCteFactory.setDistDFeIntAttributes(DistDFeIntAttributesFactory.instance()
+						.ambient(TipoAmbient.PRODUCAO).ufAutor(state.getIbgeId().toString())
+						.cnpj(certificateKeystore.getCnpj()).distNSU(ultNSU).versao("1.00"), state.getIbgeId());
 
 				UnCteDistResponse response = (UnCteDistResponse) getWebServiceTemplate()
 
-						.marshalSendAndReceive(distDfeCteFactory.getAllRequestObject(), message -> {
+						.marshalSendAndReceive(distDfeCteFactory.getRequestObject(state.getIbgeId()), message -> {
 							SoapMessage soapMessage = (SoapMessage) message;
 							soapMessage.setSoapAction(
 									sefazProperties.getDocumentoFiscalEletronico().getConhecimento().getSoapAction());
+							soapMessage.writeTo(new FileOutputStream(
+									"C:\\Users\\nicho\\OneDrive\\Documentos\\teste soapmessage\\dist.xml"));
 						});
 				status = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getcStat();
 				String xMotivo = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getxMotivo();
 				ultNSU = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getUltNSU();
-				docsDecompresseds.addAll(distDFeConhecimentoDeserializer
-						.deserialize(response.getUnCteDistInteresseResult().getUnRetDistDFeInt()));
+
+				if (status.equals("138")) {
+					docsDecompresseds.addAll(distDFeConhecimentoDeserializer
+							.deserialize(response.getUnCteDistInteresseResult().getUnRetDistDFeInt()));
+				}
 
 				log.info("Got reponse from " + getDefaultUri() + ", for state of: " + state.getNome() + " with status: "
 						+ status + " xMotivo: " + xMotivo);
@@ -142,16 +153,6 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 		});
 
 		return new DistDFeCteResponse(certificateKeystore, estadosDistDFeResponses);
-	}
-
-	private void setDistDFeIntAttributes(DistDFeInt distDFeInt, CertificateKeystore certificateKeystore,
-			Integer cUFAutor, String ultNSU) {
-		log.debug("Setting attributes to request object...");
-		distDFeInt.setVersao("1.00");
-		distDFeInt.setTpAmb(TipoAmbient.PRODUCAO.getAmbient());
-		distDFeInt.setCUFAutor(cUFAutor.toString());
-		distDFeInt.setCNPJ(certificateKeystore.getCnpj());
-		distDfeCteFactory.setUltNsu(ultNSU);
 	}
 
 	private void createWebServiceMessageSender() throws KeyManagementException, NoSuchAlgorithmException {
