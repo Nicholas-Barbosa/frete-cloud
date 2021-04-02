@@ -23,21 +23,20 @@ public class DistDFeCteRequestObjectsFactory {
 		this.cteDadosMsg = new CteDadosMsg();
 		this.distDFeInt = new DistDFeInt();
 		this.distNSU = new DistNSU();
+		this.cteDadosMsg.getContent().add(distDFeInt);
 
+		distDFeInt.setDistNSU(distNSU);
 		wrapCteDadosMsgIntoCteDistDFeInteresse();
-
 	}
 
 	/**
-	 * Este metodo ira englobar um objeto DistDFeInt num outro objeto, CteDadosMsg e
-	 * ira retornar uma referencia mutavel de DistDFeInt.
+	 * Ira retornar uma referencia mutavel de DistDFeInt.
 	 * 
 	 * @return DistDFeInt
 	 * 
 	 * @author nicholas-barbosa
 	 */
 	public DistDFeInt getRequestObjectInstance() {
-		this.cteDadosMsg.getContent().add(distDFeInt);
 		return distDFeInt;
 	}
 
@@ -49,7 +48,6 @@ public class DistDFeCteRequestObjectsFactory {
 	 */
 	public DistDFeCteRequestObjectsFactory setUltNsu(String nsu) {
 		distNSU.setUltNSU(nsu);
-		distDFeInt.setDistNSU(distNSU);
 
 		return this;
 	}

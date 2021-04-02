@@ -4,16 +4,17 @@ import java.time.LocalDate;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-@MappedSuperclass
+@Entity
 public class Conhecimento extends DocumentoEletronico {
 
 	private final String chave;
@@ -45,10 +46,15 @@ public class Conhecimento extends DocumentoEletronico {
 	private final Carga carga;
 	@Enumerated(EnumType.STRING)
 	private final TipoCte tipo;
+
+	@OneToMany
+	@JoinTable(joinColumns = @JoinColumn(name = "conhecimento_normal_id"), inverseJoinColumns = @JoinColumn(name = "conhecimento_adicional_id"))
+	private final Set<Conhecimento> conhecimentosAdicionais;
+
 	public Conhecimento(Long id, String numero, String serie, LocalDate emissao, String chave, String naturezaOperacao,
 			Modal modal, City origem, City destino, Empresa emitente, Empresa remetente, Empresa expedidor,
 			Empresa destinatario, PrestacaoServico vPrest, Imposto imposto, TipoCte tipoServico,
-			Set<NotaFiscal> notaFiscal, Carga carga, TipoCte tipo) {
+			Set<NotaFiscal> notaFiscal, Carga carga, TipoCte tipo, Set<Conhecimento> conhecimentosAdicionais) {
 		super(id, numero, serie, emissao);
 		this.chave = chave;
 		this.naturezaOperacao = naturezaOperacao;
@@ -62,9 +68,11 @@ public class Conhecimento extends DocumentoEletronico {
 		this.prestacaoServico = vPrest;
 		this.imposto = imposto;
 		this.tipoServico = tipoServico;
+
 		this.notasFiscais = notaFiscal;
 		this.carga = carga;
 		this.tipo = tipo;
+		this.conhecimentosAdicionais = conhecimentosAdicionais;
 	}
 
 	public String getChave() {
@@ -125,5 +133,9 @@ public class Conhecimento extends DocumentoEletronico {
 
 	public TipoCte getTipo() {
 		return tipo;
+	}
+
+	public Set<Conhecimento> getConhecimentosAdicionais() {
+		return conhecimentosAdicionais;
 	}
 }

@@ -1,32 +1,28 @@
 package com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.farawaybr.frete.domain.CertificateKeystore;
 
 public class RetDistDFeIntDecompressed {
 
-	private LoteDistDFeIntDecompressed loteDistDFeIntDecompressedl;
-
 	private CertificateKeystore certificateKeystore;
+	private List<EstadoDistDFeResponse> estadosResponses;
 
-	private Integer ibgeStateId;
-
-	public RetDistDFeIntDecompressed(LoteDistDFeIntDecompressed loteDistDFeIntDecompressedl,
-			CertificateKeystore certificateKeystore, Integer ibgeStateId) {
+	public RetDistDFeIntDecompressed(List<EstadoDistDFeResponse> estadosResponses,
+			CertificateKeystore certificateKeystore) {
 		super();
-		this.loteDistDFeIntDecompressedl = loteDistDFeIntDecompressedl;
 		this.certificateKeystore = certificateKeystore;
-		this.ibgeStateId = ibgeStateId;
-	}
-
-	public LoteDistDFeIntDecompressed getLoteDistDFeIntDecompressedl() {
-		return loteDistDFeIntDecompressedl;
+		this.estadosResponses = new ArrayList<>(estadosResponses);
 	}
 
 	public CertificateKeystore getCertificateKeystore() {
 		return certificateKeystore;
 	}
 
-	public Integer getIbgeStateId() {
-		return ibgeStateId;
+	public List<EstadoDistDFeResponse> getEstadosResponses() {
+		return estadosResponses;
 	}
+
 }

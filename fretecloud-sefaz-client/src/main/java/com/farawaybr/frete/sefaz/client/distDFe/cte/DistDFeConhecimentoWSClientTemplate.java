@@ -34,7 +34,7 @@ public class DistDFeConhecimentoWSClientTemplate {
 		certificateRepository.findAll().forEach(c -> {
 			try {
 				distDFeCteWSClient.setDefaultCertificateKeystore(c);
-				responses.addAll(distDFeCteWSClient.sendAndReceive());
+
 			} catch (UnrecoverableKeyException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -61,4 +61,5 @@ public class DistDFeConhecimentoWSClientTemplate {
 		});
 
 	}
+
 }

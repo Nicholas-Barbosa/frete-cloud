@@ -8,8 +8,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
@@ -21,10 +21,12 @@ import org.springframework.ws.transport.http.HttpComponentsMessageSender;
 
 import com.farawaybr.frete.domain.CertificateKeystore;
 import com.farawaybr.frete.domain.State;
+import com.farawaybr.frete.domain.StateToSearchDistFeCte;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.deserilize.DistDFeConhecimentoWSDeserializer;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.TipoAmbient;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.UnCteDistResponse;
-import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.UnRetDistDFeInt;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed.DocZipDecompressed;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed.EstadoDistDFeResponse;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed.RetDistDFeIntDecompressed;
 import com.farawaybr.frete.sefaz.httpclient.CloseableHttpClientSslFactory;
 import com.farawaybr.frete.sefaz.keystore.KeyTrustStoreLoader;
@@ -88,7 +90,6 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 				.setTrustManager(keyTrustLoader.trustManager());
 		createWebServiceMessageSender();
 
-		distDFeConhecimentoDeserializer.setDefaultCertificate(certificateKeystore);
 	}
 
 	/**
@@ -98,16 +99,19 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 	 * @throws KeyManagementException
 	 */
 	@Override
-	public List<RetDistDFeIntDecompressed> sendAndReceive() {
-		List<RetDistDFeIntDecompressed> retsDecompressed = new CopyOnWriteArrayList<>();
-		certificateKeystore.getStatesToSearch().parallelStream().forEach(stateToSearch -> {
+	public RetDistDFeIntDecompressed sendAndReceive() {
+		List<EstadoDistDFeResponse> estadosDistDFeResponses = new CopyOnWriteArrayList<>();
+
+		List<DocZipDecompressed> docsDecompresseds = new CopyOnWriteArrayList<>();
+
+		Set<StateToSearchDistFeCte> statesToSearch = certificateKeystore.getStatesToSearch();
+		statesToSearch.parallelStream().forEach(stateToSearch -> {
 			State state = stateToSearch.getState();
 
 			DistDFeInt distDFeInt = distDfeCteFactory.getRequestObjectInstance();
 
 			String status = null;
 			String ultNSU = stateToSearch.getLastNSU();
-			final List<UnRetDistDFeInt> retsDists = new ArrayList<>();
 
 			do {
 				log.info("Sending request to " + getDefaultUri() + " with NSU # " + ultNSU + " for state of "
@@ -125,17 +129,19 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 				status = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getcStat();
 				String xMotivo = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getxMotivo();
 				ultNSU = response.getUnCteDistInteresseResult().getUnRetDistDFeInt().getUltNSU();
+				docsDecompresseds.addAll(distDFeConhecimentoDeserializer
+						.deserialize(response.getUnCteDistInteresseResult().getUnRetDistDFeInt()));
 
-				retsDists.add(response.getUnCteDistInteresseResult().getUnRetDistDFeInt());
 				log.info("Got reponse from " + getDefaultUri() + ", for state of: " + state.getNome() + " with status: "
 						+ status + " xMotivo: " + xMotivo);
 				status = "137";
 			} while (status.equals("138"));
+			estadosDistDFeResponses
+					.add(new EstadoDistDFeResponse(stateToSearch.getState().getIbgeId(), docsDecompresseds));
 			log.info("All ctes were obtained for the certificate " + certificateKeystore.getCnpj());
-			distDFeConhecimentoDeserializer.deserialize(retsDists.get(0), state.getIbgeId());
 		});
 
-		return retsDecompressed;
+		return new RetDistDFeIntDecompressed(estadosDistDFeResponses, certificateKeystore);
 	}
 
 	private void setDistDFeIntAttributes(DistDFeInt distDFeInt, CertificateKeystore certificateKeystore,

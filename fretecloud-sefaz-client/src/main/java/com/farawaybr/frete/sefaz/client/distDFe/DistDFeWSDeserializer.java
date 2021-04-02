@@ -11,14 +11,8 @@ public interface DistDFeWSDeserializer<R, P> {
 	 * @param <P> param object that will be gzip decompressed.
 	 * @return <R> resulting decompressed object.
 	 */
-	R deserialize(P r, Integer ufAutor);
+	List<R> deserialize(P r);
 
-	/**
-	 * Will repeatedly call the method deserialize(P p).
-	 * 
-	 * @param <P> param object that will be gzip decompressed.
-	 * @return <R> resulting decompressed object.
-	 */
-	List<R> deserialize(List<P> r, Integer ibgeStateId);
+	
 
 }

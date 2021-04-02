@@ -8,12 +8,9 @@ import javax.xml.bind.JAXBException;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.farawaybr.frete.domain.CertificateKeystore;
 import com.farawaybr.frete.sefaz.JaxbTemplateService;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.UnRetDistDFeInt;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed.DocZipDecompressed;
-import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed.LoteDistDFeIntDecompressed;
-import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed.RetDistDFeIntDecompressed;
 import com.farawaybr.frete.sefaz.gzip.GzipService;
 
 import br.inf.portalfiscal.cte.procCTE.CteProc;
@@ -26,8 +23,6 @@ public class DistDFeConhecimentoWSDeserializerImpl implements DistDFeConheciment
 	private final GzipService gzipService;
 	private final JaxbTemplateService jaxbTemplateService;
 
-	private CertificateKeystore certificateKeystore;
-
 	public DistDFeConhecimentoWSDeserializerImpl(GzipService gzipService, JaxbTemplateService jaxbTemplateService) {
 		super();
 		this.gzipService = gzipService;
@@ -35,7 +30,7 @@ public class DistDFeConhecimentoWSDeserializerImpl implements DistDFeConheciment
 	}
 
 	@Override
-	public RetDistDFeIntDecompressed deserialize(UnRetDistDFeInt ret, Integer ibgeStateId) {
+	public List<DocZipDecompressed> deserialize(UnRetDistDFeInt ret) {
 		List<DocZipDecompressed> docs = ret.getLoteDistDFeInt().getDocsZip().parallelStream().map(doc -> {
 			String rawContent = gzipService.decompress(doc.getValue());
 			try {
@@ -53,21 +48,7 @@ public class DistDFeConhecimentoWSDeserializerImpl implements DistDFeConheciment
 			}
 			return null;
 		}).collect(Collectors.toList());
-		LoteDistDFeIntDecompressed loteDistDFeIntDecompressed = new LoteDistDFeIntDecompressed(docs);
-		return new RetDistDFeIntDecompressed(loteDistDFeIntDecompressed, certificateKeystore, ibgeStateId);
-
-	}
-
-	@Override
-	public List<RetDistDFeIntDecompressed> deserialize(List<UnRetDistDFeInt> ret, Integer ibgeStateId) {
-		// TODO Auto-generated method stub
-		return ret.parallelStream().map(retElement -> this.deserialize(retElement, ibgeStateId))
-				.collect(Collectors.toList());
-	}
-
-	@Override
-	public void setDefaultCertificate(CertificateKeystore certificateKeystore) {
-		this.certificateKeystore = certificateKeystore;
+		return docs;
 
 	}
 

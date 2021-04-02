@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.farawaybr.frete.domain.CertificateKeystore;
 import com.farawaybr.frete.domain.State;
 import com.farawaybr.frete.domain.StateToSearchDistFeCte;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed.RetDistDFeIntDecompressed;
 
 @SpringBootTest
 class DistConhecimentoClientTest {
@@ -50,9 +51,16 @@ class DistConhecimentoClientTest {
 			distCte.setDefaultCertificateKeystore(new CertificateKeystore(null,
 					"C:\\Users\\nicho\\Downloads\\CDG COMPONENTES AUTOMOTIVOS LTDA09512164000172.pfx",
 					new char[] { 'M', '@', 's', 't', 'e', 'r', '!', '@', '#' }, "09512164000172", statesToSearch));
-			distCte.sendAndReceive().stream()
-					.flatMap(ret -> ret.getLoteDistDFeIntDecompressedl().getDocsDecompressed().stream())
-					.forEach(doc -> System.out.println("cte " + doc.getCteProc()));
+			distCte.sendAndReceive().getEstadosResponses().parallelStream()
+					.flatMap(estado -> estado.getDocsDecompressed().stream()).forEach(response -> {
+						if (response.getCteProc() != null) {
+							System.out.println(
+									"response cteProc " + response.getCteProc().getCTe().getInfCte().getIde().getNCT());
+						} else
+							System.out.println("response procEevento "
+									+ response.getProcEvento().getEventoCTe().getInfEvento().getTpAmb());
+					});
+
 		} catch (UnrecoverableKeyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
