@@ -1,9 +1,9 @@
-package com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed;
+package com.farawaybr.frete.sefaz.client.distDFe.cte.response;
 
 import br.inf.portalfiscal.cte.procCTE.CteProc;
 import br.inf.portalfiscal.cte.procevento.ProcEventoCTe;
 
-public class DocZipDecompressed {
+public class DistDFeCteDocDecompressed {
 
 	private String nsu;
 
@@ -11,7 +11,7 @@ public class DocZipDecompressed {
 
 	private ProcEventoCTe procEvento;
 
-	public DocZipDecompressed(String nsu, CteProc cteProc, ProcEventoCTe procEvento) {
+	public DistDFeCteDocDecompressed(String nsu, CteProc cteProc, ProcEventoCTe procEvento) {
 		super();
 		this.nsu = nsu;
 		this.cteProc = cteProc;
@@ -29,4 +29,5 @@ public class DocZipDecompressed {
 	public ProcEventoCTe getProcEvento() {
 		return procEvento;
 	}
+
 }

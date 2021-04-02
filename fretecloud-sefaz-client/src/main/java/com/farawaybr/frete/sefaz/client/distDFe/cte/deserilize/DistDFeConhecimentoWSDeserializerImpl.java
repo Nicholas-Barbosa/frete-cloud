@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.farawaybr.frete.sefaz.JaxbTemplateService;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.response.DistDFeCteDocDecompressed;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.UnRetDistDFeInt;
-import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed.DocZipDecompressed;
 import com.farawaybr.frete.sefaz.gzip.GzipService;
 
 import br.inf.portalfiscal.cte.procCTE.CteProc;
@@ -30,8 +30,8 @@ public class DistDFeConhecimentoWSDeserializerImpl implements DistDFeConheciment
 	}
 
 	@Override
-	public List<DocZipDecompressed> deserialize(UnRetDistDFeInt ret) {
-		List<DocZipDecompressed> docs = ret.getLoteDistDFeInt().getDocsZip().parallelStream().map(doc -> {
+	public List<DistDFeCteDocDecompressed> deserialize(UnRetDistDFeInt ret) {
+		List<DistDFeCteDocDecompressed> docs = ret.getLoteDistDFeInt().getDocsZip().parallelStream().map(doc -> {
 			String rawContent = gzipService.decompress(doc.getValue());
 			try {
 				CteProc cteProc = null;
@@ -41,7 +41,7 @@ public class DistDFeConhecimentoWSDeserializerImpl implements DistDFeConheciment
 				} else {
 					procEvento = jaxbTemplateService.unmarhall(rawContent, ProcEventoCTe.class);
 				}
-				return new DocZipDecompressed(doc.getNsu(), cteProc, procEvento);
+				return new DistDFeCteDocDecompressed(doc.getNsu(), cteProc, procEvento);
 			} catch (JAXBException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

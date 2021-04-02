@@ -13,7 +13,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.farawaybr.frete.repository.CertificateKeystoreRepository;
-import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed.RetDistDFeIntDecompressed;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.response.DistDFeCteResponse;
 
 @Component
 public class DistDFeConhecimentoWSClientTemplate {
@@ -30,7 +30,7 @@ public class DistDFeConhecimentoWSClientTemplate {
 	}
 
 	public void reciveAndSave() {
-		List<RetDistDFeIntDecompressed> responses = new ArrayList<>();
+		List<DistDFeCteResponse> responses = new ArrayList<>();
 		certificateRepository.findAll().forEach(c -> {
 			try {
 				distDFeCteWSClient.setDefaultCertificateKeystore(c);

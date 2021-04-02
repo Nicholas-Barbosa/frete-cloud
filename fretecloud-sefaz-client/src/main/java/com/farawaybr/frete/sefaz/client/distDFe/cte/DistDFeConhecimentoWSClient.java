@@ -23,11 +23,11 @@ import com.farawaybr.frete.domain.CertificateKeystore;
 import com.farawaybr.frete.domain.State;
 import com.farawaybr.frete.domain.StateToSearchDistFeCte;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.deserilize.DistDFeConhecimentoWSDeserializer;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.response.DistDFeCteDocDecompressed;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.response.DistDFeCteResponse;
+import com.farawaybr.frete.sefaz.client.distDFe.cte.response.DistDFeCteResponseByEstado;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.TipoAmbient;
 import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.UnCteDistResponse;
-import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed.DocZipDecompressed;
-import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed.EstadoDistDFeResponse;
-import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed.RetDistDFeIntDecompressed;
 import com.farawaybr.frete.sefaz.httpclient.CloseableHttpClientSslFactory;
 import com.farawaybr.frete.sefaz.keystore.KeyTrustStoreLoader;
 import com.farawaybr.frete.sefaz.properties.SefazProperties;
@@ -99,10 +99,10 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 	 * @throws KeyManagementException
 	 */
 	@Override
-	public RetDistDFeIntDecompressed sendAndReceive() {
-		List<EstadoDistDFeResponse> estadosDistDFeResponses = new CopyOnWriteArrayList<>();
+	public DistDFeCteResponse sendAndReceive() {
+		List<DistDFeCteResponseByEstado> estadosDistDFeResponses = new CopyOnWriteArrayList<>();
 
-		List<DocZipDecompressed> docsDecompresseds = new CopyOnWriteArrayList<>();
+		List<DistDFeCteDocDecompressed> docsDecompresseds = new CopyOnWriteArrayList<>();
 
 		Set<StateToSearchDistFeCte> statesToSearch = certificateKeystore.getStatesToSearch();
 		statesToSearch.parallelStream().forEach(stateToSearch -> {
@@ -137,11 +137,11 @@ public class DistDFeConhecimentoWSClient extends WebServiceGatewaySupport implem
 				status = "137";
 			} while (status.equals("138"));
 			estadosDistDFeResponses
-					.add(new EstadoDistDFeResponse(stateToSearch.getState().getIbgeId(), docsDecompresseds));
+					.add(new DistDFeCteResponseByEstado(stateToSearch.getState().getIbgeId(), docsDecompresseds));
 			log.info("All ctes were obtained for the certificate " + certificateKeystore.getCnpj());
 		});
 
-		return new RetDistDFeIntDecompressed(estadosDistDFeResponses, certificateKeystore);
+		return new DistDFeCteResponse(certificateKeystore, estadosDistDFeResponses);
 	}
 
 	private void setDistDFeIntAttributes(DistDFeInt distDFeInt, CertificateKeystore certificateKeystore,

@@ -19,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.farawaybr.frete.domain.CertificateKeystore;
 import com.farawaybr.frete.domain.State;
 import com.farawaybr.frete.domain.StateToSearchDistFeCte;
-import com.farawaybr.frete.sefaz.client.distDFe.cte.unmarshal.decompressed.RetDistDFeIntDecompressed;
 
 @SpringBootTest
 class DistConhecimentoClientTest {
